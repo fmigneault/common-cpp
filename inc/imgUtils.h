@@ -5,6 +5,7 @@ Image operations
 #define COMMON_CPP_IMG_UTILS_H
 
 #include "opencv2/opencv.hpp"
+#include <string>
 
 // Reads an image from file and displays it in a small window at the same time
 cv::Mat imReadAndDisplay(std::string imagePath, std::string windowName = "", cv::ImreadModes readMode = cv::IMREAD_GRAYSCALE);

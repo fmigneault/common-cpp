@@ -8,12 +8,15 @@ Logging/printing operations
 #define __STDC_WANT_LIB_EXT1__ 1
 
 #include "types.h"
+
+#include <bitset>
+#include <ctime>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <istream>
-#include <fstream>
-#include <string>
-#include <ctime>
 #include <sstream>
+#include <string>
 
 const std::string WINDOW_NAME = "Display";
 const std::string LOGGER_FILE = "output.txt";
@@ -59,6 +62,13 @@ std::string featuresToVectorString(FeatureVector features);
 std::string featuresToSvmString(FeatureVector features, int label);
 
 template <const int BIT_SIZE>
-std::string displayAsBinary(const int option, bool displayNumeric = true);
+std::string displayAsBinary(const int option, bool displayNumeric)
+{
+    std::stringstream ss;
+    std::bitset<BIT_SIZE> binOption(option);
+    ss << binOption;
+    if (displayNumeric) ss << " (" << option << ")";
+    return ss.str();
+}
 
 #endif/*COMMON_CPP_LOGGING_H*/

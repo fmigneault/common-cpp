@@ -10,6 +10,8 @@ project(${COMMON-CPP_PROJECT})
 
 if(MSVC)	
 	set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)
+	add_definitions(-D_ITERATOR_DEBUG_LEVEL=0)
+	add_definitions("/EHsc")
 endif()
 
 # set projet paths/files
@@ -62,10 +64,19 @@ endif()
 option(Boost_USE_STATIC_LIBS	ON)
 option(Boost_USE_MULTITHREADED  ON)
 option(Boost_USE_STATIC_RUNTIME	OFF)
-find_package(Boost REQUIRED COMPONENTS filesystem)
+find_package(Boost REQUIRED COMPONENTS filesystem system)
 if (${Boost_FOUND})	
-	set(COMMON-CPP_INCLUDE_DIRS  ${COMMON-CPP_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-	set(COMMON-CPP_LIBRARIES 	   ${COMMON-CPP_LIBRARIES} 	${Boost_LIBRARIES})
+	set(COMMON-CPP_INCLUDE_DIRS ${COMMON-CPP_INCLUDE_DIRS} 	${Boost_INCLUDE_DIRS})
+	set(COMMON-CPP_LIBRARIES 	${COMMON-CPP_LIBRARIES} 	${Boost_LIBRARIES})
+	if (WIN32)
+		# disable auto linking 
+		#add_definitions(-DBOOST_ALL_NO_LIB)
+		remove_definitions(-BOOST_NO_EXCEPTIONS)
+	endif()
+	if (NOT ${Boost_USE_STATIC_LIBS})
+		# avoid invalid linking error when using shared libs
+		add_definitions(-DBOOST_ALL_DYN_LINK)
+	endif()
 endif()
 
 # include/linking

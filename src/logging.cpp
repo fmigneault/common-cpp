@@ -59,13 +59,3 @@ std::string featuresToSvmString(FeatureVector features, int label)
     }
     return s;
 }
-
-template <const int BIT_SIZE>
-std::string displayAsBinary(const int option, bool displayNumeric)
-{
-    std::stringstream ss;
-    std::bitset<BIT_SIZE> binOption(option);
-    ss << binOption;
-    if (displayNumeric) ss << " (" << option << ")";
-    return ss.str();
-}
