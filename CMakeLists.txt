@@ -81,6 +81,10 @@ target_link_libraries(${COMMON-CPP_LIBRARY} ${COMMON-CPP_LIBRARIES})
 	# target_link_libraries(${COMMON-CPP_TESTS} ${COMMON-CPP_LIBRARIES})
 # endif()
 
+# fix config paths as required
+string(REGEX REPLACE "\\\\" "/" INSTALL_INCLUDE_DIR ${INSTALL_INCLUDE_DIR}) 
+string(REGEX REPLACE "\\\\" "/" INSTALL_LIB_DIR 	${INSTALL_LIB_DIR}) 
+
 # update config file
 set(COMMON-CPP_CONFIG_INC	${INSTALL_INCLUDE_DIR})
 set(COMMON-CPP_CONFIG_LIB	${INSTALL_LIB_DIR}/${COMMON-CPP_LIBRARY_EXT})
