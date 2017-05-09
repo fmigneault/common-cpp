@@ -34,7 +34,9 @@ Properties/
 x64/
 x86/
 bld/
+bld-vc14-x64/
 lib/
+lib-vc14-x64/
 sln/
 [Bb]in/
 [Oo]bj/

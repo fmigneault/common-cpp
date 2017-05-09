@@ -1,0 +1,12 @@
+/* COX-S2V Dataset:
+
+
+		TODO!!! ADD INFO (as in ChokePoint)
+*/
+
+#ifndef COMMON_CPP_DATASET_COXS2V_H
+#define COMMON_CPP_DATASET_COXS2V_H
+
+
+
+#endif/*COMMON_CPP_DATASET_COXS2V_H*/
