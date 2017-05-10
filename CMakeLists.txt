@@ -12,6 +12,9 @@ if(MSVC)
     set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)
     add_definitions(-D_ITERATOR_DEBUG_LEVEL=0)
     add_definitions("/EHsc")
+else()
+    set(CMAKE_CXX_COMPILER g++)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
 endif()
 
 # set projet paths/files
@@ -82,7 +85,9 @@ endif()
 # include/linking
 set(COMMON-CPP_LIBRARY ${COMMON-CPP_PROJECT})
 add_library(${COMMON-CPP_LIBRARY} ${COMMON-CPP_LIBRARY_TYPE} ${COMMON-CPP_SOURCE_FILES} ${COMMON-CPP_HEADER_FILES})
-set_target_properties(${COMMON-CPP_LIBRARY} PROPERTIES LINKER_LANGUAGE C++)
+if(MSVC)
+    set_target_properties(${COMMON-CPP_LIBRARY} PROPERTIES LINKER_LANGUAGE C++)
+endif()
 include_directories(${COMMON-CPP_INCLUDE_DIRS})
 target_link_libraries(${COMMON-CPP_LIBRARY} ${COMMON-CPP_LIBRARIES})
 
