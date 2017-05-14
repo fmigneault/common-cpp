@@ -9,9 +9,13 @@ set(COMMON-CPP_PROJECT "CommonCpp")
 project(${COMMON-CPP_PROJECT})
 
 if(MSVC)
-    set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)
-    add_definitions(-D_ITERATOR_DEBUG_LEVEL=0)
+    set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)    
     add_definitions("/EHsc")
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_definitions(-D_ITERATOR_DEBUG_LEVEL=2 -D_DEBUG)
+    else()
+        add_definitions(-D_ITERATOR_DEBUG_LEVEL=0)
+    endif()
 endif()
 
 # set projet paths/files
@@ -61,7 +65,7 @@ if (${OpenCV_FOUND})
 endif()
 
 # find Boost
-option(Boost_USE_STATIC_LIBS    ON)
+option(Boost_USE_STATIC_LIBS    OFF)
 option(Boost_USE_MULTITHREADED  ON)
 option(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost REQUIRED COMPONENTS filesystem system)
@@ -71,12 +75,12 @@ if (${Boost_FOUND})
     if (WIN32)
         # disable auto linking 
         #add_definitions(-DBOOST_ALL_NO_LIB)
-        remove_definitions(-BOOST_NO_EXCEPTIONS)
+        #remove_definitions(-BOOST_NO_EXCEPTIONS)
     endif()
-    if (NOT ${Boost_USE_STATIC_LIBS})
-        # avoid invalid linking error when using shared libs
-        add_definitions(-DBOOST_ALL_DYN_LINK)
-    endif()
+    # if (NOT ${Boost_USE_STATIC_LIBS})
+        # # avoid invalid linking error when using shared libs
+        # add_definitions(-DBOOST_ALL_DYN_LINK)
+    # endif()
 endif()
 
 # include/linking
