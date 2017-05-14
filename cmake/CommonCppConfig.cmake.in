@@ -1,0 +1,7 @@
+# - Config file for the Common (C++) package
+# It defines the following variables
+#  CommonCpp_INCLUDE_DIRS - include directories
+#  CommonCpp_LIBRARIES    - libraries to link against
+
+set(CommonCpp_INCLUDE_DIRS 	"@COMMON-CPP_CONFIG_INC@")
+set(CommonCpp_LIBRARIES 	"@COMMON-CPP_CONFIG_LIB@")
