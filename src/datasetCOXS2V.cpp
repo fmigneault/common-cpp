@@ -21,6 +21,8 @@ string COXS2V::getSequenceString(int video)
 
 string COXS2V::getIndividualID(int pseudoID, bool withSuffix, bool asPseudoID)
 {
+    if (pseudoID < 1 || pseudoID > INDIVIDUAL_QUANTITY)
+        return "";
     if (asPseudoID) {
         int pad = pseudoID > 9 ? (pseudoID > 99 ? (pseudoID > 999 ? 0 : 1) : 2) : 3;
         return string(pad, '0') + to_string(pseudoID);
@@ -28,6 +30,23 @@ string COXS2V::getIndividualID(int pseudoID, bool withSuffix, bool asPseudoID)
     return INDIVIDUAL_IDS[pseudoID - 1] + withSuffix ? "0000" : "";
 }
 
+int COXS2V::getPseudoIDFromStringID(string id)
+{
+    auto low = std::lower_bound(INDIVIDUAL_IDS.begin(), INDIVIDUAL_IDS.end(), id);
+    if (low == INDIVIDUAL_IDS.end())
+        return 0;
+    return low - INDIVIDUAL_IDS.end() + 1;
+}
+
+string COXS2V::getPseudoIDFromStringID(string id)
+{
+    int pseudoID = getPseudoIDFromStringID(id);
+    if (pseudoID > 0)
+        return INDIVIDUAL_IDS[pseudoID - 1];
+    return "";
+}
+
+// sorted list of original IDs
 const vector<string> COXS2V::INDIVIDUAL_IDS = {
     "20110318_0001", "20110318_0002", "20110318_0003", "20110318_0004", "20110318_0005", "20110318_0006", "20110318_0007", "20110318_0008", "20110318_0009", "20110318_0010",
     "20110318_0012", "20110318_0014", "20110318_0015", "20110318_0016", "20110318_0017", "20110318_0018", "20110318_0019", "20110318_0020", "20110318_0021", "20110318_0022",

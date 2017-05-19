@@ -13,6 +13,7 @@
 #ifndef COMMON_CPP_DATASET_COXS2V_H
 #define COMMON_CPP_DATASET_COXS2V_H
 
+#include <algorithm>
 #include <string>
 #include <vector>
 using namespace std;
@@ -25,12 +26,16 @@ public:
     static const int CAMERA_QUANTITY = 2;
     static const int INDIVIDUAL_QUANTITY = 1000;
     static const int TOTAL_SEQUENCES = VIDEO_QUANTITY;
-    static const vector<string> INDIVIDUAL_IDS;
+    static const vector<string> INDIVIDUAL_IDS;             // sorted list of original IDs
     
     // Sequence information
     static string getSequenceString(int video, int pseudoID = 0);
     static string getSequenceString(int video);
-    static string getIndividualID(int pseudoID, bool withSuffix = false, bool asPseudoID = false);    
+    static string getIndividualID(int pseudoID, bool withSuffix = false, bool asPseudoID = false);
+    
+    // additional utilities
+    static int getPseudoIDFromStringID(string id);
+    static string getPseudoIDFromStringID(string id);
 
     // Directory names
     static const string EYES_GROUND_TRUTH_DIRECTORY_NAME;   // "Eye_location"
