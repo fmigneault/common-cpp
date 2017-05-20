@@ -32,6 +32,7 @@ pipelines:
           - cmake -DCommonCpp_BUILD_TESTS=ON ..
           # Build the porject.
           - make
+          - CommonCpp_Test
           
 options:
   docker: true
