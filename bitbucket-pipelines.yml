@@ -28,7 +28,7 @@ pipelines:
           - mkdir build
           - cd build 
           # Call the CMake.
-          - cmake --build CommonCpp_BUILD_TESTS=ON
+          - cmake --build bld -DCommonCpp_BUILD_TESTS=ON
           # Build the porject.
           - make
           
