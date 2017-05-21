@@ -27,10 +27,10 @@ string COXS2V::getIndividualID(int pseudoID, bool withSuffix, bool asPseudoID)
         int pad = pseudoID > 9 ? (pseudoID > 99 ? (pseudoID > 999 ? 0 : 1) : 2) : 3;
         return string(pad, '0') + to_string(pseudoID);
     }
-    return INDIVIDUAL_IDS[pseudoID - 1] + withSuffix ? "0000" : "";
+    return INDIVIDUAL_IDS[pseudoID - 1] + (withSuffix ? "0000" : "");
 }
 
-int COXS2V::getPseudoIDFromStringID(string id)
+int COXS2V::getPseudoIDIndexFromIDString(string id)
 {
     auto low = std::lower_bound(INDIVIDUAL_IDS.begin(), INDIVIDUAL_IDS.end(), id);
     if (low == INDIVIDUAL_IDS.end())
@@ -38,9 +38,9 @@ int COXS2V::getPseudoIDFromStringID(string id)
     return low - INDIVIDUAL_IDS.end() + 1;
 }
 
-string COXS2V::getPseudoIDFromStringID(string id)
+string COXS2V::getPseudoIDStringFromIDString(string id)
 {
-    int pseudoID = getPseudoIDFromStringID(id);
+    int pseudoID = getPseudoIDIndexFromIDString(id);
     if (pseudoID > 0)
         return INDIVIDUAL_IDS[pseudoID - 1];
     return "";
@@ -148,4 +148,4 @@ const vector<string> COXS2V::INDIVIDUAL_IDS = {
     "20110424_0230", "20110424_0232", "20110424_0233", "20110424_0237", "20110424_0238", "20110424_0239", "20110424_0241", "20110424_0242", "20110424_0243", "20110424_0247",
     "20110424_0252", "20110424_0255", "20110424_0271", "20110424_0274", "20110424_0276", "20110424_0277", "20110424_0278", "20110424_0279", "20110424_0283", "20110424_0285",
     "20110424_0286", "20110424_0287", "20110424_0288", "20110424_0289", "20110424_0292", "20110424_0294", "20110424_0295", "20110424_0296", "20110424_0298", "20110424_0300" 
-}
+};
