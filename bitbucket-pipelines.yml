@@ -29,10 +29,12 @@ pipelines:
           - mkdir build
           - cd build 
           # Call the CMake.
-          - cmake -DCommonCpp_BUILD_TESTS=ON ..
-          # Build the porject.
+          - cmake -DCommonCpp_BUILD_TESTS=ON -DCommonCpp_INSTALL_TESTS=ON -DCMAKE_INSTALL_PREFIX=./install ..
+          # Build the project.
           - make
-          - CommonCpp_Test
+          # Install and test.
+          - make install          
+          - ./install/bin/CommonCpp_Test
           
 options:
   docker: true

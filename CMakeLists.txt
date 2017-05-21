@@ -17,7 +17,8 @@ else()
 endif()
 
 # options
-option(CommonCpp_BUILD_TESTS "Build tests" OFF)
+option(CommonCpp_BUILD_TESTS    "Build tests"   OFF)
+option(CommonCpp_INSTALL_TESTS  "Install tests" OFF)
 
 # set projet paths/files
 set(CommonCpp_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
@@ -132,11 +133,11 @@ install(TARGETS ${CommonCpp_PROJECT}
 install(FILES   ${CommonCpp_HEADER_FILES} DESTINATION ${INSTALL_INC_DIR})
 install(FILES   ${CommonCpp_CONFIG_PATH}  DESTINATION ${INSTALL_CMAKE_DIR})
 
-# if(${CommonCpp_BUILD_TESTS})
-    # install(TARGETS ${CommonCpp_TEST_DIRS} RUNTIME  DESTINATION ${INSTALL_BIN_DIR})
-    # file(GLOB CommonCpp_IMG_TESTS ${CommonCpp_IMG_DIR}/*)
-    # install(FILES   ${CommonCpp_IMG_TESTS}  DESTINATION ${INSTALL_IMG_DIR})
-# endif()
+if(${CommonCpp_BUILD_TESTS} AND ${CommonCpp_INSTALL_TESTS})    
+    file(GLOB CommonCpp_IMG_TEST ${CommonCpp_IMG_DIR}/*)
+    install(FILES ${CommonCpp_IMG_TEST} DESTINATION ${INSTALL_BIN_DIR})
+    install(TARGETS ${CommonCpp_TEST} RUNTIME DESTINATION ${INSTALL_BIN_DIR})
+endif()
 
 # extra definitions for msvc (avoid linking problems)
 if(MSVC)
@@ -147,3 +148,5 @@ if(MSVC)
         target_compile_definitions(${CommonCpp_TEST}    PRIVATE "-D_ITERATOR_DEBUG_LEVEL=$<$<CONFIG:Debug>:2;_DEBUG>$<$<NOT:$<CONFIG:Debug>>:0>")
     endif()    
 endif()
+
+mark_as_advanced(FORCE CommonCpp_INCLUDE_DIRS CommonCpp_LIBRARIES)
