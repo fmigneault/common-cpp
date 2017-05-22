@@ -7,9 +7,9 @@ const string COXS2V::VIDEO_DIRECTORY_NAME = "COX-S2V-Video";
 
 string COXS2V::getSequenceString(int video, int pseudoID)
 {
-    if (pseudoID < 1 || pseudoID > INDIVIDUAL_QUANTITY)
-        return getSequenceString(video);
-    return getSequenceString(video) + "/" + getIndividualID(pseudoID, false, false);
+    string seq = getSequenceString(video);
+    string sid = getIndividualID(pseudoID, false, false);
+    return seq + (seq == "" || sid == "" ? "" : "/" + getIndividualID(pseudoID, false, false));
 }
 
 string COXS2V::getSequenceString(int video)
@@ -19,15 +19,15 @@ string COXS2V::getSequenceString(int video)
     return "video" + std::to_string(video);
 }
 
-string COXS2V::getIndividualID(int pseudoID, bool withSuffix, bool asPseudoID)
+string COXS2V::getIndividualID(int pseudoID, bool withSuffix, bool asPseudoID, bool withPrefix)
 {
     if (pseudoID < 1 || pseudoID > INDIVIDUAL_QUANTITY)
         return "";
     if (asPseudoID) {
         int pad = pseudoID > 9 ? (pseudoID > 99 ? (pseudoID > 999 ? 0 : 1) : 2) : 3;
-        return string(pad, '0') + to_string(pseudoID);
+        return (withPrefix ? "ID" : "") + string(pad, '0') + to_string(pseudoID);
     }
-    return INDIVIDUAL_IDS[pseudoID - 1] + (withSuffix ? "0000" : "");
+    return INDIVIDUAL_IDS[pseudoID - 1] + (withSuffix ? "_0000" : "");
 }
 
 int COXS2V::getPseudoIDIndexFromIDString(string id)
@@ -35,14 +35,16 @@ int COXS2V::getPseudoIDIndexFromIDString(string id)
     auto low = std::lower_bound(INDIVIDUAL_IDS.begin(), INDIVIDUAL_IDS.end(), id);
     if (low == INDIVIDUAL_IDS.end())
         return 0;
-    return low - INDIVIDUAL_IDS.end() + 1;
+    if (*low != id)
+        return 0;
+    return low - INDIVIDUAL_IDS.begin() + 1;
 }
 
-string COXS2V::getPseudoIDStringFromIDString(string id)
+string COXS2V::getPseudoIDStringFromIDString(string id, bool withPrefix)
 {
     int pseudoID = getPseudoIDIndexFromIDString(id);
     if (pseudoID > 0)
-        return INDIVIDUAL_IDS[pseudoID - 1];
+        return getIndividualID(pseudoID, false, true, withPrefix);
     return "";
 }
 

@@ -16,7 +16,7 @@ class ChokePoint
 public:
     // --- possible sequence information ---
 
-    enum PORTAL_TYPE { ENTER, LEAVE };                      // Portal types indicating the direction the in which portal is crossed
+    static enum PortalType { ENTER, LEAVE };                // Portal types indicating the direction the in which portal is crossed
     static const int PORTAL_TYPE_QUANTITY = 2;              // Number of portals types (1-based indexes)
     static const int PORTAL_QUANTITY = 2;                   // Number of portals employed (1-based indexes)
     static const int SESSION_QUANTITY = 4;                  // Number of sequenced individual trajectory video sessions (1-based indexes)
@@ -29,7 +29,7 @@ public:
 
     // returns 'P#T_S#_C#', or optionally 'P#T_S#_C#/ID####' if a valid ID is specified
     // returns '' if either of the video sequence indexes are invalid values
-    static string getSequenceString(int portal, PORTAL_TYPE type, int session, int camera, int id = 0);
+    static string getSequenceString(int portal, PortalType type, int session, int camera, int id = 0);
     static string getIndividualID(int id, bool withPrefixID = false);
 
     // --- directory names ---
