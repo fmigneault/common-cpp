@@ -23,10 +23,10 @@ class COXS2V
 public:
     // --- possible sequence information ---
 
-    static const int VIDEO_QUANTITY = 4;                    // number of videos in the dataset (1-based indexes)
-    static const int CAMERA_QUANTITY = 2;                   // number of cameras employed (1-based indexes)
-    static const int INDIVIDUAL_QUANTITY = 1000;            // number of individuals in the dataset (1-based indexes)
-    static const int TOTAL_SEQUENCES = VIDEO_QUANTITY;      // total number of sequences (1-based indexes)
+    static const int VIDEO_QUANTITY;                        // number of videos in the dataset (1-based indexes)
+    static const int CAMERA_QUANTITY;                       // number of cameras employed (1-based indexes)
+    static const int INDIVIDUAL_QUANTITY;                   // number of individuals in the dataset (1-based indexes)
+    static const int TOTAL_SEQUENCES;                       // total number of sequences (1-based indexes)
     static const vector<string> INDIVIDUAL_IDS;             // sorted list of original IDs (pseudo ID index -> real ID mapping)
     
     // --- Sequence information ---
@@ -36,17 +36,21 @@ public:
     static string getSequenceString(int video, int pseudoID);
     // returns 'video#' if a valid number is specified, '' otherwise
     static string getSequenceString(int video);
-    // returns 'yyyymmdd_####', optionally with suffix such as 'yyyymmdd_####_0000' if specified
+    // returns 'yyyymmdd_####', optionally with suffix such as 'yyyymmdd_####_0000' if specified, ignores prefix parameter in this case
     // returns instead the '####' pseudo ID if requested, ignores the suffix parameter in this case
+    // returns optionally the 'ID####' pseudo ID if requested with prefix, ignores suffix parameter in this case
     // in any combination, returns '' if the pseudo ID is an invalid value
-    static string getIndividualID(int pseudoID, bool withSuffix = false, bool asPseudoID = false);
+    static string getIndividualID(int pseudoID, bool withSuffix = false, bool asPseudoID = false, bool withPrefix = false);
     
     // --- additional utilities ---
 
-    // returns the index of the pseudo ID mapping from a given 'yyyymmdd_####' real ID
+    // returns the index of the pseudo ID mapping from a given 'yyyymmdd_####' real ID    
+    // returns zero in case of invalid or unmatched ID
     static int getPseudoIDIndexFromIDString(string id);
     // returns the '####' formatted pseudo ID from a given 'yyyymmdd_####' real ID
-    static string getPseudoIDStringFromIDString(string id);
+    // optionally returns the 'ID####' format if prefix is requested
+    // returns '' in case of invalid or unmatched ID
+    static string getPseudoIDStringFromIDString(string id, bool withPrefix = false);
 
     // --- directory names ---
 
