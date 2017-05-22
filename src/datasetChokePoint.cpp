@@ -1,5 +1,14 @@
 #include "datasetChokePoint.h"
 
+const int ChokePoint::PORTAL_TYPE_QUANTITY = 2;
+const int ChokePoint::PORTAL_QUANTITY = 2;
+const int ChokePoint::SESSION_QUANTITY = 4;
+const int ChokePoint::SESSION_SIMULTANEOUS_INDIVIDUALS = 5;
+const int ChokePoint::CAMERA_QUANTITY = 3;
+const int ChokePoint::INDIVIDUAL_QUANTITY = 30;
+const int ChokePoint::TOTAL_SEQUENCES = ChokePoint::PORTAL_QUANTITY * ChokePoint::SESSION_QUANTITY * 
+                                        ChokePoint::PORTAL_TYPE_QUANTITY * ChokePoint::CAMERA_QUANTITY;
+
 const string ChokePoint::CROPPED_FACES_DIRECTORY_NAME = "cropped_faces";
 const string ChokePoint::GROUND_TRUTH_DIRECTORY_NAME = "Ground Truth";
 const string ChokePoint::STILL_DIRECTORY_NAME = "Enroll";

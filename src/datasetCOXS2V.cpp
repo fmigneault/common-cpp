@@ -1,5 +1,10 @@
 #include "datasetCOXS2V.h"
 
+const int COXS2V::VIDEO_QUANTITY = 4;
+const int COXS2V::CAMERA_QUANTITY = 2;
+const int COXS2V::INDIVIDUAL_QUANTITY = 1000;
+const int COXS2V::TOTAL_SEQUENCES = COXS2V::VIDEO_QUANTITY;
+
 const string COXS2V::EYES_GROUND_TRUTH_DIRECTORY_NAME = "Eye_location";
 const string COXS2V::PUBLICATION_DIRECTORY_NAME = "Persons-for-Publication";
 const string COXS2V::STILL_DIRECTORY_NAME = "COX-S2V-Still";

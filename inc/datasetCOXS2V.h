@@ -23,10 +23,10 @@ class COXS2V
 public:
     // --- possible sequence information ---
 
-    static const int VIDEO_QUANTITY = 4;                    // number of videos in the dataset (1-based indexes)
-    static const int CAMERA_QUANTITY = 2;                   // number of cameras employed (1-based indexes)
-    static const int INDIVIDUAL_QUANTITY = 1000;            // number of individuals in the dataset (1-based indexes)
-    static const int TOTAL_SEQUENCES = VIDEO_QUANTITY;      // total number of sequences (1-based indexes)
+    static const int VIDEO_QUANTITY;                        // number of videos in the dataset (1-based indexes)
+    static const int CAMERA_QUANTITY;                       // number of cameras employed (1-based indexes)
+    static const int INDIVIDUAL_QUANTITY;                   // number of individuals in the dataset (1-based indexes)
+    static const int TOTAL_SEQUENCES;                       // total number of sequences (1-based indexes)
     static const vector<string> INDIVIDUAL_IDS;             // sorted list of original IDs (pseudo ID index -> real ID mapping)
     
     // --- Sequence information ---
