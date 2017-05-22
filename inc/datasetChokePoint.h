@@ -16,7 +16,7 @@ class ChokePoint
 public:
     // --- possible sequence information ---
 
-    static enum PortalType { ENTER, LEAVE };                // Portal types indicating the direction the in which portal is crossed
+    enum PortalType { ENTER, LEAVE };                       // Portal types indicating the direction the in which portal is crossed
     static const int PORTAL_TYPE_QUANTITY = 2;              // Number of portals types (1-based indexes)
     static const int PORTAL_QUANTITY = 2;                   // Number of portals employed (1-based indexes)
     static const int SESSION_QUANTITY = 4;                  // Number of sequenced individual trajectory video sessions (1-based indexes)
