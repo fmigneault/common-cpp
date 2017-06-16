@@ -3,5 +3,5 @@
 #  CommonCpp_INCLUDE_DIRS - include directories
 #  CommonCpp_LIBRARIES    - libraries to link against
 
-set(CommonCpp_INCLUDE_DIRS 	"@COMMON-CPP_CONFIG_INC@")
-set(CommonCpp_LIBRARIES 	"@COMMON-CPP_CONFIG_LIB@")
+set(CommonCpp_INCLUDE_DIRS 	"@CommonCpp_CONFIG_INC@")
+set(CommonCpp_LIBRARIES 	"@CommonCpp_CONFIG_LIB@")

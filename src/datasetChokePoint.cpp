@@ -1,5 +1,6 @@
 #include "datasetChokePoint.h"
 
+const vector<ChokePoint::PortalType> ChokePoint::PORTAL_TYPES{ ENTER, LEAVE };
 const int ChokePoint::PORTAL_TYPE_QUANTITY = 2;
 const int ChokePoint::PORTAL_QUANTITY = 2;
 const int ChokePoint::SESSION_QUANTITY = 4;
