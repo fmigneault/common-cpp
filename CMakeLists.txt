@@ -16,6 +16,11 @@ else()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
 endif()
 
+# build type
+if(NOT CMAKE_DEBUG_POSTFIX)
+  set(CMAKE_DEBUG_POSTFIX d)
+endif()
+
 # options
 option(CommonCpp_BUILD_TESTS    "Build tests"   OFF)
 option(CommonCpp_INSTALL_TESTS  "Install tests" OFF)
@@ -34,9 +39,9 @@ file(GLOB CommonCpp_HEADER_TESTS "${CommonCpp_TEST_DIR}/*.h" "${CommonCpp_TEST_D
 file(GLOB CommonCpp_SOURCE_TESTS "${CommonCpp_TEST_DIR}/*.c" "${CommonCpp_TEST_DIR}/*.cpp")
 
 # Offer the user the choice of overriding the installation directories
-set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
-set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
-set(INSTALL_INC_DIR inc CACHE PATH "Installation directory for header files")
+set(INSTALL_LIBRARY_DIR lib CACHE PATH "Installation directory for libraries")
+set(INSTALL_BINARY_DIR bin CACHE PATH "Installation directory for executables")
+set(INSTALL_INCLUDE_DIR inc CACHE PATH "Installation directory for header files")
 if(WIN32 AND NOT CYGWIN)
   set(DEF_INSTALL_CMAKE_DIR cmake)
 else()
@@ -45,7 +50,7 @@ endif()
 set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
 
 # Make relative paths absolute (needed for config install)
-foreach(p LIB BIN INC CMAKE)
+foreach(p LIBRARY BINARY INCLUDE CMAKE)
   set(var INSTALL_${p}_DIR)
   if(NOT IS_ABSOLUTE "${${var}}")
     set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
@@ -57,7 +62,6 @@ set(CommonCpp_LIBRARY_STATIC "STATIC")
 set(CommonCpp_LIBRARY_SHARED "SHARED")
 set(CommonCpp_LIBRARY_TYPE ${CommonCpp_LIBRARY_STATIC} CACHE STRING "Library type to generate")
 set_property(CACHE CommonCpp_LIBRARY_TYPE PROPERTY STRINGS ${CommonCpp_LIBRARY_STATIC} ${CommonCpp_LIBRARY_SHARED}) 
-set(CommonCpp_LIBRARY_EXT ${CommonCpp_PROJECT}${CMAKE_${CommonCpp_LIBRARY_TYPE}_LIBRARY_SUFFIX})
 
 # find OpenCV
 find_package(OpenCV 3)
@@ -80,26 +84,19 @@ if(${Boost_FOUND})
     set(CommonCpp_INCLUDE_DIRS  ${CommonCpp_INCLUDE_DIRS}   ${Boost_INCLUDE_DIRS})
     set(CommonCpp_LIBRARIES     ${CommonCpp_LIBRARIES}      ${Boost_LIBRARIES})
     set(CommonCpp_LINK_DIRS     ${CommonCpp_LINK_DIRS}      ${Boost_LIBRARY_DIRS})
-    if(WIN32)
-        # disable auto linking 
-        #add_definitions(-DBOOST_ALL_NO_LIB)
-        #remove_definitions(-BOOST_NO_EXCEPTIONS)
-    endif()
-    # if(NOT ${Boost_USE_STATIC_LIBS})
-        # # avoid invalid linking error when using shared libs
-        # add_definitions(-DBOOST_ALL_DYN_LINK)
-    # endif()
 endif()
 
 # include/linking
-set(CommonCpp_LIBRARY ${CommonCpp_PROJECT})
-add_library(${CommonCpp_LIBRARY} ${CommonCpp_LIBRARY_TYPE} ${CommonCpp_SOURCE_FILES} ${CommonCpp_HEADER_FILES})
+set(CommonCpp_LIBRARY_DEBUG             ${CommonCpp_PROJECT}${CMAKE_DEBUG_POSTFIX}${CMAKE_${CommonCpp_LIBRARY_TYPE}_LIBRARY_SUFFIX})
+set(CommonCpp_LIBRARY_RELEASE           ${CommonCpp_PROJECT}${CMAKE_RELEASE_POSTFIX}${CMAKE_${CommonCpp_LIBRARY_TYPE}_LIBRARY_SUFFIX})
+set(CommonCpp_LIBRARY_TARGET            ${CommonCpp_PROJECT})
+add_library(${CommonCpp_LIBRARY_TARGET} ${CommonCpp_LIBRARY_TYPE} ${CommonCpp_SOURCE_FILES} ${CommonCpp_HEADER_FILES})
 if(MSVC)
-    set_target_properties(${CommonCpp_LIBRARY} PROPERTIES LINKER_LANGUAGE C++)
+    set_target_properties(${CommonCpp_LIBRARY_TARGET} PROPERTIES LINKER_LANGUAGE C++)
 endif()
 include_directories(${CommonCpp_INCLUDE_DIRS})
 link_directories(${CommonCpp_LINK_DIRS})
-target_link_libraries(${CommonCpp_LIBRARY} ${CommonCpp_LIBRARIES})
+target_link_libraries(${CommonCpp_LIBRARY_TARGET} ${CommonCpp_LIBRARIES})
 
 if(${CommonCpp_BUILD_TESTS}) 
     set(CommonCpp_TEST ${CommonCpp_PROJECT}_Test)
@@ -109,34 +106,38 @@ if(${CommonCpp_BUILD_TESTS})
 endif()
 
 # fix config paths as required
-string(REGEX REPLACE "\\\\" "/" INSTALL_INC_DIR ${INSTALL_INC_DIR}) 
-string(REGEX REPLACE "\\\\" "/" INSTALL_LIB_DIR ${INSTALL_LIB_DIR}) 
+string(REGEX REPLACE "\\\\" "/" INSTALL_INCLUDE_DIR ${INSTALL_INCLUDE_DIR}) 
+string(REGEX REPLACE "\\\\" "/" INSTALL_BINARY_DIR  ${INSTALL_BINARY_DIR}) 
+string(REGEX REPLACE "\\\\" "/" INSTALL_LIBRARY_DIR ${INSTALL_LIBRARY_DIR}) 
 
 # update config file
-set(CommonCpp_CONFIG_INC   ${INSTALL_INC_DIR})
-set(CommonCpp_CONFIG_LIB   ${INSTALL_LIB_DIR}/${CommonCpp_LIBRARY_EXT})
-set(CommonCpp_CONFIG_FILE  ${CommonCpp_PROJECT}Config.cmake)
+set(CommonCpp_CONFIG_INC_DIR    ${INSTALL_INCLUDE_DIR})
+set(CommonCpp_CONFIG_BIN_DIR    ${INSTALL_BINARY_DIR})
+set(CommonCpp_CONFIG_LIB_DIR    ${INSTALL_LIBRARY_DIR})
+set(CommonCpp_CONFIG_LIB_DBG    ${CommonCpp_LIBRARY_DEBUG})
+set(CommonCpp_CONFIG_LIB_REL    ${CommonCpp_LIBRARY_RELEASE})
+set(CommonCpp_CONFIG_FILE       ${CommonCpp_PROJECT}Config.cmake)
 if(${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
     set(CommonCpp_CONFIG_PATH ${CommonCpp_CONFIG_FILE})
 else()
     set(CommonCpp_CONFIG_PATH ${CMAKE_BINARY_DIR}/${CommonCpp_CONFIG_FILE})
 endif()
-file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INSTALL_INC_DIR}")
+file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INSTALL_INCLUDE_DIR}")
 configure_file(cmake/${CommonCpp_CONFIG_FILE}.in ${CommonCpp_CONFIG_PATH})
 
 # install
 install(TARGETS ${CommonCpp_PROJECT}
         EXPORT  ${CommonCpp_TARGETS}
-        RUNTIME DESTINATION ${INSTALL_BIN_DIR}
-        LIBRARY DESTINATION ${INSTALL_LIB_DIR}
-        ARCHIVE DESTINATION ${INSTALL_LIB_DIR})
-install(FILES   ${CommonCpp_HEADER_FILES} DESTINATION ${INSTALL_INC_DIR})
+        RUNTIME DESTINATION ${INSTALL_BINARY_DIR}
+        LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}
+        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR})
+install(FILES   ${CommonCpp_HEADER_FILES} DESTINATION ${INSTALL_INCLUDE_DIR})
 install(FILES   ${CommonCpp_CONFIG_PATH}  DESTINATION ${INSTALL_CMAKE_DIR})
 
 if(${CommonCpp_BUILD_TESTS} AND ${CommonCpp_INSTALL_TESTS})    
     file(GLOB CommonCpp_IMG_TEST ${CommonCpp_IMG_DIR}/*)
-    install(FILES ${CommonCpp_IMG_TEST} DESTINATION ${INSTALL_BIN_DIR})
-    install(TARGETS ${CommonCpp_TEST} RUNTIME DESTINATION ${INSTALL_BIN_DIR})
+    install(FILES   ${CommonCpp_IMG_TEST}       DESTINATION ${INSTALL_BINARY_DIR})
+    install(TARGETS ${CommonCpp_TEST} RUNTIME   DESTINATION ${INSTALL_BINARY_DIR})
 endif()
 
 # extra definitions for msvc (avoid linking problems)
