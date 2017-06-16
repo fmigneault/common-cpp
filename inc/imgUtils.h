@@ -4,7 +4,7 @@ Image operations
 #ifndef IMG_UTILS_H
 #define IMG_UTILS_H
 
-#include "generic.h"
+#include "testing.h"
 #include "opencv2/opencv.hpp"
 #include "boost/filesystem.hpp"
 namespace bfs = boost::filesystem;
