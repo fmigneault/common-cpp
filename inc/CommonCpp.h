@@ -10,6 +10,7 @@
 #include "datasetChokePoint.h"
 #include "datasetCOXS2V.h"
 #include "eval.h"
+#include "datafile.h"
 #include "generic.h"
 #include "imgUtils.h"
 #include "logging.h"
