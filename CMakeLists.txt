@@ -11,6 +11,7 @@ project(${CommonCpp_PROJECT})
 if(MSVC)
     set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)    
     add_definitions("/EHsc")
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 else()
     set(CMAKE_CXX_COMPILER g++)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
@@ -64,7 +65,7 @@ set(CommonCpp_LIBRARY_TYPE ${CommonCpp_LIBRARY_STATIC} CACHE STRING "Library typ
 set_property(CACHE CommonCpp_LIBRARY_TYPE PROPERTY STRINGS ${CommonCpp_LIBRARY_STATIC} ${CommonCpp_LIBRARY_SHARED}) 
 
 # find OpenCV
-find_package(OpenCV 3)
+find_package(OpenCV 3 REQUIRED)
 if(${OpenCV_FOUND})
     set(CommonCpp_INCLUDE_DIRS ${CommonCpp_INCLUDE_DIRS}  ${OpenCV_INCLUDE_DIRS})
     set(CommonCpp_LIBRARIES    ${CommonCpp_LIBRARIES}     ${OpenCV_LIBRARIES})
@@ -84,6 +85,17 @@ if(${Boost_FOUND})
     set(CommonCpp_INCLUDE_DIRS  ${CommonCpp_INCLUDE_DIRS}   ${Boost_INCLUDE_DIRS})
     set(CommonCpp_LIBRARIES     ${CommonCpp_LIBRARIES}      ${Boost_LIBRARIES})
     set(CommonCpp_LINK_DIRS     ${CommonCpp_LINK_DIRS}      ${Boost_LIBRARY_DIRS})
+endif()
+
+# find OpenMP
+option(WITH_OpenMP ON)
+if(${WITH_OpenMP})
+    find_package(OpenMP)
+    if("${OpenMP_FOUND}" OR "${OpenMP_C_FOUND}" OR "${OpenMP_CXX_FOUND}")
+        set(CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}    ${OpenMP_C_FLAGS})
+        set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}  ${OpenMP_CXX_FLAGS})
+        add_definitions(-DCOMMON_CPP_HAS_OPENMP)
+    endif()
 endif()
 
 # include/linking
