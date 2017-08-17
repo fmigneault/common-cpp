@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_validVectorData)
 
 BOOST_AUTO_TEST_CASE(datafile_checkBinaryHeader)
 {
-    string filePath = "./datafile_checkBinaryHeader_validHeader.bin";
+    string filePath = "datafile_checkBinaryHeader_validHeader.bin";
     string dummyHeader = "dummy header";
     vector<FeatureVector> samples(1);
     vector<int> labels(1);
