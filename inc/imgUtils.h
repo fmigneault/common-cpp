@@ -109,6 +109,15 @@ inline TMat imResize(const TMat& image, cv::Size size, cv::InterpolationFlags in
 
 // Crops an image with specified inputs
 template<typename TMat>
+inline TMat imCrop(const TMat& image, cv::Rect r)
+{
+    TMat crop;
+    image(r).copyTo(crop);
+    return crop;
+}
+
+// Crops an image with specified inputs
+template<typename TMat>
 inline TMat imCrop(const TMat& image, int x, int y, int w, int h)
 {
     return imCrop(image, cv::Rect(x, y, w, h));
@@ -119,15 +128,6 @@ template<typename TMat>
 inline TMat imCrop(const TMat& image, cv::Point p1, cv::Point p2)
 {
     return imCrop(image, cv::Rect(p1, p2));
-}
-
-// Crops an image with specified inputs
-template<typename TMat>
-inline TMat imCrop(const TMat& image, cv::Rect r)
-{
-    TMat crop;
-    image(r).copyTo(crop);
-    return crop;
 }
 
 // Crop modes for 'imCropByRatio'
