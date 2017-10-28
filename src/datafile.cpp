@@ -136,6 +136,7 @@ void DataFile::readSampleDataFile_libsvm(string filePath, vector<FeatureVector>&
 
                     // end reading index:value if termination index found (-1), otherwise check if still valid index
                     if (index == -1) break;
+                    ASSERT_THROW(index > 0, "Feature indexes must be one-based (zero index found)");
                     ASSERT_THROW(index - prev > 0, "Feature indexes must be in ascending order");
 
                     // Add omitted sparse features (zero value features)

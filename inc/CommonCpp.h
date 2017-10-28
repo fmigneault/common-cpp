@@ -7,10 +7,10 @@
 #ifndef COMMON_CPP_INCLUDE_PACKAGE_H
 #define COMMON_CPP_INCLUDE_PACKAGE_H
 
+#include "datafile.h"
 #include "datasetChokePoint.h"
 #include "datasetCOXS2V.h"
 #include "eval.h"
-#include "datafile.h"
 #include "generic.h"
 #include "imgUtils.h"
 #include "logging.h"

@@ -1,6 +1,99 @@
 #include "CommonCppTest.h"
 
 //--------------------------------------------------------------------------------
+// datafile 
+//--------------------------------------------------------------------------------
+BOOST_AUTO_TEST_SUITE(TestSuite_datafile)
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_fileNotFound)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_missingLabel)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_missingSeparator)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_inconsistentVectorDimensions)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_invalidZeroBasedIndex)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_invalidNonAscendingIndex)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_validVectorData)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_fileNotFound)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_invalidSampleCount)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_invalidFeatureCount)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_missingHeader)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_missingLabel)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_inconsistentVectorDimensions)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_validVectorData)
+{
+    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_checkBinaryHeader)
+{
+    #if 0
+    string filePath = "./datafile_checkBinaryHeader_validHeader.bin";
+    string dummyHeader = "dummy header";
+    vector<FeatureVector> samples(1);
+    vector<int> labels(1);
+    samples[1] = FeatureVector({ 1,2,3 });
+    labels[1] = { 1 };
+    DataFile::writeSampleDataFile(filePath, samples, labels, BINARY, dummyHeader);
+    ifstream ifs(filePath);
+    BOOST_CHECK(DataFile::checkBinaryHeader(ifs, dummyHeader));
+    BOOST_CHECK(!DataFile::checkBinaryHeader(ifs, "random header"));
+    #endif
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+//--------------------------------------------------------------------------------
 // dataChokePoint 
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_datasetChokePoint)
@@ -335,8 +428,8 @@ BOOST_AUTO_TEST_CASE(COXS2V_IndividualIDsMap_NotEmptyValidSize)
 BOOST_AUTO_TEST_CASE(COXS2V_IndividualIDsMap_EqualBoundaryStrings)
 {
     BOOST_REQUIRE_EQUAL(coxs2v.INDIVIDUAL_IDS.size(), 1000);
-    BOOST_CHECK_EQUAL(coxs2v.INDIVIDUAL_IDS[0], "20110318_0001");
-    BOOST_CHECK_EQUAL(coxs2v.INDIVIDUAL_IDS[10], "20110318_0012");
+    BOOST_CHECK_EQUAL(coxs2v.INDIVIDUAL_IDS[0],   "20110318_0001");
+    BOOST_CHECK_EQUAL(coxs2v.INDIVIDUAL_IDS[10],  "20110318_0012");
     BOOST_CHECK_EQUAL(coxs2v.INDIVIDUAL_IDS[999], "20110424_0300");
 }
 
