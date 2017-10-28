@@ -10,6 +10,7 @@ typedef size_t omp_size_t;  // MSVC with Intel Compiler has OpenMP >2.0 (support
 typedef long long omp_size_t;
 #endif // Intel Compiler
 #else  // Other OS
+#include <sys/types.h>
 typedef size_t omp_size_t;
 #endif // Windows & MSCV
 #endif // COMMON_CPP_HAS_OPENMP
