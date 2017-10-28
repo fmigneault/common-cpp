@@ -13,7 +13,7 @@ if(MSVC)
     add_definitions("/EHsc")
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 else()
-    set(CMAKE_CXX_COMPILER gcc)
+    set(CMAKE_CXX_COMPILER g++)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
 endif()
 
