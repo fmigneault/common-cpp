@@ -105,6 +105,8 @@ endif()
 # include/linking
 set(CommonCpp_LIBRARY_DEBUG             ${CommonCpp_PROJECT}${CMAKE_DEBUG_POSTFIX}${CMAKE_${CommonCpp_LIBRARY_TYPE}_LIBRARY_SUFFIX})
 set(CommonCpp_LIBRARY_RELEASE           ${CommonCpp_PROJECT}${CMAKE_RELEASE_POSTFIX}${CMAKE_${CommonCpp_LIBRARY_TYPE}_LIBRARY_SUFFIX})
+set(CommonCpp_LIBRARY_DEBUG     	${CMAKE_${CommonCpp_LIBRARY_TYPE}_LIBRARY_PREFIX}${CommonCpp_LIBRARY_DEBUG})
+set(CommonCpp_LIBRARY_RELEASE   	${CMAKE_${CommonCpp_LIBRARY_TYPE}_LIBRARY_PREFIX}${CommonCpp_LIBRARY_RELEASE})
 set(CommonCpp_LIBRARY_TARGET            ${CommonCpp_PROJECT})
 add_library(${CommonCpp_LIBRARY_TARGET} ${CommonCpp_LIBRARY_TYPE} ${CommonCpp_SOURCE_FILES} ${CommonCpp_HEADER_FILES})
 if(MSVC)
