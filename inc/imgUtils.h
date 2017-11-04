@@ -160,7 +160,7 @@ inline TMat imCropByRatio(const TMat& image, double ratio, CropMode cropMode = C
 // Heuristic that finds the background color using the maximum gray pixel value from the four image corners
 // Optionally only employs mask corners to find the background color where:  mask = (TL, TR, BL, BR)
 inline cv::Scalar findBackGroundColor(const cv::Mat& image, cv::Vec4b mask = cv::Vec4b::all(1))
-{    
+{
     if (image.channels() == 1) {
         uchar bg = 0;
         if (mask[0]) bg = MAX(bg, image.at<uchar>(0, 0));
@@ -169,13 +169,13 @@ inline cv::Scalar findBackGroundColor(const cv::Mat& image, cv::Vec4b mask = cv:
         if (mask[3]) bg = MAX(bg, image.at<uchar>(image.rows - 1, image.cols - 1));
         return cv::Scalar::all(bg);
     }
-    
+
     cv::Mat corners(cv::Size(2, 2), image.type(), 0), cornersGray;
     corners.at<cv::Vec3b>(0, 0) = image.at<cv::Vec3b>(0, 0);
     corners.at<cv::Vec3b>(0, 1) = image.at<cv::Vec3b>(0, image.cols - 1);
     corners.at<cv::Vec3b>(1, 0) = image.at<cv::Vec3b>(image.rows - 1, 0);
     corners.at<cv::Vec3b>(1, 1) = image.at<cv::Vec3b>(image.rows - 1, image.cols - 1);
-    cv::cvtColor(corners, cornersGray, cv::COLOR_BGR2GRAY);    
+    cv::cvtColor(corners, cornersGray, cv::COLOR_BGR2GRAY);
 
     uchar bgGray = 0;
     cv::Scalar bg = cv::Scalar::all(0);
@@ -190,21 +190,21 @@ inline cv::Scalar findBackGroundColor(const cv::Mat& image, cv::Vec4b mask = cv:
     if (mask[2] && cornersGray.at<uchar>(1, 0) > bgGray) {
         bg = corners.at<cv::Vec3b>(1, 0);
         bgGray = cornersGray.at<uchar>(1, 0);
-    }    
+    }
     if (mask[3] && cornersGray.at<uchar>(1, 1) > bgGray)
         bg = corners.at<cv::Vec3b>(1, 1);
     return bg;
 }
 
-inline cv::Scalar findBackGroundColor(const cv::UMat& image, cv::Vec4b mask = cv::Vec4b::all(1)) 
-{ 
-    return findBackGroundColor(image.getMat(cv::ACCESS_READ), mask); 
+inline cv::Scalar findBackGroundColor(const cv::UMat& image, cv::Vec4b mask = cv::Vec4b::all(1))
+{
+    return findBackGroundColor(image.getMat(cv::ACCESS_READ), mask);
 }
 
 // Returns a vector containing multiple synthetic images generated from the original image using specified parameters
 // The orginal image is returned as first element in the output vector if requested with 'keepOriginal' (default: true)
 template<typename TMat>
-inline std::vector<TMat> imSyntheticGeneration(const TMat& image, size_t translationOffset = 4, 
+inline std::vector<TMat> imSyntheticGeneration(const TMat& image, size_t translationOffset = 4,
                                                double scale = 0.5, size_t minSize = 20, bool keepOriginal = true)
 {
     ASSERT_LOG(translationOffset > 0, "Translation offset must be greater than zero");
@@ -215,7 +215,7 @@ inline std::vector<TMat> imSyntheticGeneration(const TMat& image, size_t transla
     std::vector<TMat> synth(6 - offsetOriginal);
     if (keepOriginal)
         image.copyTo(synth[0]);
-    
+
     synth[1 - offsetOriginal] = imTranslate(image, cv::Point( translationOffset, 0), findBackGroundColor(image, cv::Vec4b(1, 0, 1, 0)));
     synth[2 - offsetOriginal] = imTranslate(image, cv::Point(0,  translationOffset), findBackGroundColor(image, cv::Vec4b(1, 1, 0, 0)));
     synth[3 - offsetOriginal] = imTranslate(image, cv::Point(-translationOffset, 0), findBackGroundColor(image, cv::Vec4b(0, 1, 0, 1)));
@@ -241,7 +241,7 @@ inline std::vector<TMat> imSplitPatches(const TMat& image, cv::Size patchCounts,
     {
         std::vector<TMat> vImg(1);
         if (noCopy)
-            vImg[0] = image;        
+            vImg[0] = image;
         else
             image.copyTo(vImg[0]);
         return vImg;
@@ -256,7 +256,7 @@ inline std::vector<TMat> imSplitPatches(const TMat& image, cv::Size patchCounts,
             Because the patches ROI are only a sub-area of the full Mat (whole image in memory), pixels accessed by index via
             the 'Mat::data' pointer still refer to the whole image, even if passing the pointer of the created patch ROI variable.
 
-            Because various methods access the pixel data by index offset from such pointer, the data pointer of this image as input causes 
+            Because various methods access the pixel data by index offset from such pointer, the data pointer of this image as input causes
             improperly/unexpected indexes calculation as the whole image data is employed instead of only the patch's data.
 
             We resolve the issue by forcing a 'copyTo' of the patch data, creating a new and distinct array containing only the patch that can be
@@ -275,27 +275,17 @@ inline std::vector<TMat> imSplitPatches(const TMat& image, cv::Size patchCounts,
     return std::vector<TMat>();
 }
 
-// Returns a vector of images combining patches splitting and other preprocessing steps (resizing, grayscale, hist.equal., etc.) 
-template<typename TMat>
-inline std::vector<TMat> imPreprocess(std::string imagePath, cv::Size imSize, cv::Size patchCounts, bool useHistEqual = false,
-                                      std::string windowName = "", cv::ImreadModes readMode = cv::IMREAD_GRAYSCALE,
-                                      cv::InterpolationFlags resizeMode = cv::INTER_AREA)
-{
-    TMat img = imReadAndDisplay(imagePath, windowName, readMode);
-    return imPreprocess(img, imSize, patchCounts, useHistEqual, "", readMode, resizeMode);  // avoid displaying again
-}
-
-// Returns a vector of images combining patches splitting and other preprocessing steps (resizing, grayscale, hist.equal., etc.) 
+// Returns a vector of images combining patches splitting and other preprocessing steps (resizing, grayscale, hist.equal., etc.)
 template<typename TMat>
 inline std::vector<TMat> imPreprocess(const TMat& roi, cv::Size imSize, cv::Size patchCounts, bool useHistEqual = false,
-                                      std::string windowName = "", cv::ImreadModes readMode = cv::IMREAD_GRAYSCALE, 
+                                      std::string windowName = "", cv::ImreadModes readMode = cv::IMREAD_GRAYSCALE,
                                       cv::InterpolationFlags resizeMode = cv::INTER_AREA)
 {
     if (windowName != "")
     {
         cv::imshow(windowName, roi);
         cv::waitKey(1); // allow window redraw
-    }    
+    }
     TMat img;
     roi.copyTo(img);
     if (readMode == cv::IMREAD_COLOR || img.channels() > 1)
@@ -304,6 +294,16 @@ inline std::vector<TMat> imPreprocess(const TMat& roi, cv::Size imSize, cv::Size
         cv::equalizeHist(img, img);
     cv::resize(img, img, imSize, 0, 0, resizeMode);
     return imSplitPatches(img, patchCounts);
+}
+
+// Returns a vector of images combining patches splitting and other preprocessing steps (resizing, grayscale, hist.equal., etc.)
+template<typename TMat>
+inline std::vector<TMat> imPreprocess(std::string imagePath, cv::Size imSize, cv::Size patchCounts, bool useHistEqual = false,
+                                      std::string windowName = "", cv::ImreadModes readMode = cv::IMREAD_GRAYSCALE,
+                                      cv::InterpolationFlags resizeMode = cv::INTER_AREA)
+{
+    TMat img = imReadAndDisplay(imagePath, windowName, readMode);
+    return imPreprocess(img, imSize, patchCounts, useHistEqual, "", readMode, resizeMode);  // avoid displaying again
 }
 
 #endif/*IMG_UTILS_H*/
