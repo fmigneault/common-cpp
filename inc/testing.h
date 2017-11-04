@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <string>
 #include <sstream>
 #include <fstream>
 
@@ -25,7 +26,7 @@ enum TestStatus  // errors should be defined as negative values (-#) to ensure '
 Display
 ---------------------*/
 
-int passThroughDisplayTestStatus(std::string testName, int error = TestStatus::PASSED);
+int passThroughDisplayTestStatus(std::string testName, int error = TestStatus::PASSED, std::string reason = "");
 
 /* --------------------
 Paths
