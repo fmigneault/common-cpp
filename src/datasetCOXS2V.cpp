@@ -5,37 +5,37 @@ const int COXS2V::CAMERA_QUANTITY = 2;
 const int COXS2V::INDIVIDUAL_QUANTITY = 1000;
 const int COXS2V::TOTAL_SEQUENCES = COXS2V::VIDEO_QUANTITY;
 
-const string COXS2V::EYES_GROUND_TRUTH_DIRECTORY_NAME = "Eye_location";
-const string COXS2V::PUBLICATION_DIRECTORY_NAME = "Persons-for-Publication";
-const string COXS2V::STILL_DIRECTORY_NAME = "COX-S2V-Still";
-const string COXS2V::VIDEO_DIRECTORY_NAME = "COX-S2V-Video";
+const std::string COXS2V::EYES_GROUND_TRUTH_DIRECTORY_NAME = "Eye_location";
+const std::string COXS2V::PUBLICATION_DIRECTORY_NAME = "Persons-for-Publication";
+const std::string COXS2V::STILL_DIRECTORY_NAME = "COX-S2V-Still";
+const std::string COXS2V::VIDEO_DIRECTORY_NAME = "COX-S2V-Video";
 
-string COXS2V::getSequenceString(int video, int pseudoID)
+std::string COXS2V::getSequenceString(int video, int pseudoID)
 {
-    string seq = getSequenceString(video);
-    string sid = getIndividualID(pseudoID, false, false);
+    std::string seq = getSequenceString(video);
+    std::string sid = getIndividualID(pseudoID, false, false);
     return seq + (seq == "" || sid == "" ? "" : "/" + getIndividualID(pseudoID, false, false));
 }
 
-string COXS2V::getSequenceString(int video)
+std::string COXS2V::getSequenceString(int video)
 {
     if (video < 1 || video > VIDEO_QUANTITY)
         return "";
     return "video" + std::to_string(video);
 }
 
-string COXS2V::getIndividualID(int pseudoID, bool withSuffix, bool asPseudoID, bool withPrefix)
+std::string COXS2V::getIndividualID(int pseudoID, bool withSuffix, bool asPseudoID, bool withPrefix)
 {
     if (pseudoID < 1 || pseudoID > INDIVIDUAL_QUANTITY)
         return "";
     if (asPseudoID) {
         int pad = pseudoID > 9 ? (pseudoID > 99 ? (pseudoID > 999 ? 0 : 1) : 2) : 3;
-        return (withPrefix ? "ID" : "") + string(pad, '0') + to_string(pseudoID);
+        return (withPrefix ? "ID" : "") + std::string(pad, '0') + std::to_string(pseudoID);
     }
     return INDIVIDUAL_IDS[pseudoID - 1] + (withSuffix ? "_0000" : "");
 }
 
-int COXS2V::getPseudoIDIndexFromIDString(string id)
+int COXS2V::getPseudoIDIndexFromIDString(std::string id)
 {
     auto low = std::lower_bound(INDIVIDUAL_IDS.begin(), INDIVIDUAL_IDS.end(), id);
     if (low == INDIVIDUAL_IDS.end())
@@ -45,7 +45,7 @@ int COXS2V::getPseudoIDIndexFromIDString(string id)
     return low - INDIVIDUAL_IDS.begin() + 1;
 }
 
-string COXS2V::getPseudoIDStringFromIDString(string id, bool withPrefix)
+std::string COXS2V::getPseudoIDStringFromIDString(std::string id, bool withPrefix)
 {
     int pseudoID = getPseudoIDIndexFromIDString(id);
     if (pseudoID > 0)
@@ -54,7 +54,7 @@ string COXS2V::getPseudoIDStringFromIDString(string id, bool withPrefix)
 }
 
 // sorted list of original IDs
-const vector<string> COXS2V::INDIVIDUAL_IDS = {
+const std::vector<std::string> COXS2V::INDIVIDUAL_IDS = {
     "20110318_0001", "20110318_0002", "20110318_0003", "20110318_0004", "20110318_0005", "20110318_0006", "20110318_0007", "20110318_0008", "20110318_0009", "20110318_0010",
     "20110318_0012", "20110318_0014", "20110318_0015", "20110318_0016", "20110318_0017", "20110318_0018", "20110318_0019", "20110318_0020", "20110318_0021", "20110318_0022",
     "20110318_0024", "20110318_0025", "20110318_0026", "20110318_0027", "20110318_0028", "20110318_0029", "20110318_0030", "20110318_0031", "20110318_0032", "20110318_0033",
@@ -154,5 +154,5 @@ const vector<string> COXS2V::INDIVIDUAL_IDS = {
     "20110424_0202", "20110424_0207", "20110424_0209", "20110424_0210", "20110424_0211", "20110424_0212", "20110424_0216", "20110424_0218", "20110424_0221", "20110424_0225",
     "20110424_0230", "20110424_0232", "20110424_0233", "20110424_0237", "20110424_0238", "20110424_0239", "20110424_0241", "20110424_0242", "20110424_0243", "20110424_0247",
     "20110424_0252", "20110424_0255", "20110424_0271", "20110424_0274", "20110424_0276", "20110424_0277", "20110424_0278", "20110424_0279", "20110424_0283", "20110424_0285",
-    "20110424_0286", "20110424_0287", "20110424_0288", "20110424_0289", "20110424_0292", "20110424_0294", "20110424_0295", "20110424_0296", "20110424_0298", "20110424_0300" 
+    "20110424_0286", "20110424_0287", "20110424_0288", "20110424_0289", "20110424_0292", "20110424_0294", "20110424_0295", "20110424_0296", "20110424_0298", "20110424_0300"
 };

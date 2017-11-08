@@ -1,7 +1,7 @@
 #include "CommonCppTest.h"
 
 //--------------------------------------------------------------------------------
-// datafile 
+// datafile
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_datafile)
 
@@ -78,10 +78,10 @@ BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_validVectorData)
 BOOST_AUTO_TEST_CASE(datafile_checkBinaryHeader)
 {
     #if 0
-    string filePath = "./datafile_checkBinaryHeader_validHeader.bin";
-    string dummyHeader = "dummy header";
-    vector<FeatureVector> samples(1);
-    vector<int> labels(1);
+    std::string filePath = "./datafile_checkBinaryHeader_validHeader.bin";
+    std::string dummyHeader = "dummy header";
+    std::vector<FeatureVector> samples(1);
+    std::vector<int> labels(1);
     samples[1] = FeatureVector({ 1,2,3 });
     labels[1] = { 1 };
     DataFile::writeSampleDataFile(filePath, samples, labels, BINARY, dummyHeader);
@@ -94,14 +94,14 @@ BOOST_AUTO_TEST_CASE(datafile_checkBinaryHeader)
 BOOST_AUTO_TEST_SUITE_END()
 
 //--------------------------------------------------------------------------------
-// dataChokePoint 
+// dataChokePoint
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_datasetChokePoint)
 
 BOOST_AUTO_TEST_CASE(ChokePoint_getSequenceString_ValidParameters_ReturnValidString)
 {
-    string seq;    
-    seq = chokepoint.getSequenceString(1, ChokePoint::PortalType::ENTER, 1, 1);    
+    std::string seq;
+    seq = chokepoint.getSequenceString(1, ChokePoint::PortalType::ENTER, 1, 1);
     BOOST_CHECK_EQUAL(seq, "P1E_S1_C1");
     seq = chokepoint.getSequenceString(2, ChokePoint::PortalType::LEAVE, 3, 2);
     BOOST_CHECK_EQUAL(seq, "P2L_S3_C2");
@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE(ChokePoint_getSequenceString_ValidParameters_ReturnValidStr
 
 BOOST_AUTO_TEST_CASE(ChokePoint_getSequenceString_InvalidParameterBounds_ReturnEmptyString)
 {
-    string seq;
+    std::string seq;
     seq = chokepoint.getSequenceString(0, ChokePoint::PortalType::ENTER, 1, 1);
     BOOST_CHECK_EQUAL(seq, "");
     seq = chokepoint.getSequenceString(3, ChokePoint::PortalType::ENTER, 1, 1);
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(ChokePoint_getSequenceString_InvalidParameterBounds_ReturnE
 
 BOOST_AUTO_TEST_CASE(ChokePoint_getSequenceString_InvalidIndividualID_ReturnOnlySequenceString)
 {
-    string seq;
+    std::string seq;
     seq = chokepoint.getSequenceString(1, ChokePoint::PortalType::ENTER, 2, 1, -1);
     BOOST_CHECK_EQUAL(seq, "P1E_S2_C1");
     seq = chokepoint.getSequenceString(1, ChokePoint::PortalType::LEAVE, 4, 3, 50);
@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE(ChokePoint_getSequenceString_InvalidIndividualID_ReturnOnly
 
 BOOST_AUTO_TEST_CASE(ChokePoint_getIndividualID_ValidParameters_ReturnValidString)
 {
-    string id;
+    std::string id;
     id = chokepoint.getIndividualID(2, false);
     BOOST_CHECK_EQUAL(id, "0002");
     id = chokepoint.getIndividualID(11, false);
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(ChokePoint_getIndividualID_ValidParameters_ReturnValidStrin
 
 BOOST_AUTO_TEST_CASE(ChokePoint_getIndividualID_InvalidParameters_ReturnEmptyString)
 {
-    string id;
+    std::string id;
     id = chokepoint.getIndividualID(0, false);
     BOOST_CHECK_EQUAL(id, "");
     id = chokepoint.getIndividualID(-2, false);
@@ -199,7 +199,7 @@ BOOST_AUTO_TEST_SUITE(TestSuite_dataCOXS2V)
 
 BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_ValidParamtersNoPseudoID_ReturnValidString)
 {
-    string seq;
+    std::string seq;
     seq = coxs2v.getSequenceString(1);
     BOOST_CHECK_EQUAL(seq, "video1");
     seq = coxs2v.getSequenceString(2);
@@ -208,7 +208,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_ValidParamtersNoPseudoID_ReturnVal
 
 BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_ValidParamtersWithPseudoID_ReturnValidString)
 {
-    string seq;
+    std::string seq;
     seq = coxs2v.getSequenceString(1, 1);
     BOOST_CHECK_EQUAL(seq, "video1/20110318_0001");
     seq = coxs2v.getSequenceString(4, 2);
@@ -217,7 +217,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_ValidParamtersWithPseudoID_ReturnV
 
 BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_InvalidVideoValue_NoPseudoID_ReturnEmptyString)
 {
-    string seq;
+    std::string seq;
     seq = coxs2v.getSequenceString(0);
     BOOST_CHECK_EQUAL(seq, "");
     seq = coxs2v.getSequenceString(5);
@@ -226,7 +226,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_InvalidVideoValue_NoPseudoID_Retur
 
 BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_ValidVideoValue_InvalidPseudoID_ReturnOnlySequenceString)
 {
-    string seq;
+    std::string seq;
     seq = coxs2v.getSequenceString(1, 0);
     BOOST_CHECK_EQUAL(seq, "video1");
     seq = coxs2v.getSequenceString(2, -10);
@@ -237,7 +237,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_ValidVideoValue_InvalidPseudoID_Re
 
 BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_InvalidVideo_InvalidPseudoID_ReturnEmptyString)
 {
-    string seq;
+    std::string seq;
     seq = coxs2v.getSequenceString(0, -1);
     BOOST_CHECK_EQUAL(seq, "");
     seq = coxs2v.getSequenceString(-1, 0);
@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_InvalidVideo_InvalidPseudoID_Retur
 
 BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_InvalidVideo_ValidPseudoID_ReturnEmptyString)
 {
-    string seq;
+    std::string seq;
     seq = coxs2v.getSequenceString(0, 1000);
     BOOST_CHECK_EQUAL(seq, "");
     seq = coxs2v.getSequenceString(-1, 100);
@@ -259,7 +259,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getSequenceString_InvalidVideo_ValidPseudoID_ReturnE
 
 BOOST_AUTO_TEST_CASE(COXS2V_getIndividualID_ValidPseudoID_ReturnValidString)
 {
-    string id;
+    std::string id;
     id = coxs2v.getIndividualID(1,      false, false, false);
     BOOST_CHECK_EQUAL(id,               "20110318_0001");
     id = coxs2v.getIndividualID(1000,   false, false, false);
@@ -277,7 +277,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getIndividualID_ValidPseudoID_ReturnValidString)
     BOOST_CHECK_EQUAL(id,               "20110318_0001_0000");
     id = coxs2v.getIndividualID(1000,   true , false, true );
     BOOST_CHECK_EQUAL(id,               "20110424_0300_0000");
-    
+
     id = coxs2v.getIndividualID(1,      false, true , false);
     BOOST_CHECK_EQUAL(id,               "0001");
     id = coxs2v.getIndividualID(1000,   false, true , false);
@@ -299,7 +299,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getIndividualID_ValidPseudoID_ReturnValidString)
 
 BOOST_AUTO_TEST_CASE(COXS2V_getIndividualID_InvalidPseudoID_ReturnEmptyString)
 {
-    string id;
+    std::string id;
     id = coxs2v.getIndividualID(0,      false, false, false);
     BOOST_CHECK_EQUAL(id, "");
     id = coxs2v.getIndividualID(-1,     false, false, false);
@@ -341,7 +341,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getIndividualID_InvalidPseudoID_ReturnEmptyString)
 BOOST_AUTO_TEST_CASE(COXS2V_getPseudoIDIndexFromIDString_ValidPseudoID_ReturnValidIndex)
 {
     int id;
-    string id0001 = "20110318_0001", id1000 = "20110424_0300";    
+    std::string id0001 = "20110318_0001", id1000 = "20110424_0300";
     id = coxs2v.getPseudoIDIndexFromIDString(id0001);
     BOOST_CHECK_EQUAL(id, 1);
     id = coxs2v.getPseudoIDIndexFromIDString(id1000);
@@ -365,8 +365,8 @@ BOOST_AUTO_TEST_CASE(COXS2V_getPseudoIDIndexFromIDString_InvalidPseudoID_ReturnZ
 
 BOOST_AUTO_TEST_CASE(COXS2V_getPseudoIDStringFromIDString_ValidPseudoID_ReturnValidString)
 {
-    string id;
-    string id0001 = "20110318_0001", id1000 = "20110424_0300";
+    std::string id;
+    std::string id0001 = "20110318_0001", id1000 = "20110424_0300";
     id = coxs2v.getPseudoIDStringFromIDString(id0001, false);
     BOOST_CHECK_EQUAL(id, "0001");
     id = coxs2v.getPseudoIDStringFromIDString(id1000, false);
@@ -379,7 +379,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_getPseudoIDStringFromIDString_ValidPseudoID_ReturnVa
 
 BOOST_AUTO_TEST_CASE(COXS2V_getPseudoIDStringFromIDString_InvalidPseudoID_ReturnEmptyString)
 {
-    string id;
+    std::string id;
     id = coxs2v.getPseudoIDStringFromIDString("20110318_0001_0000", false);
     BOOST_CHECK_EQUAL(id, "");
     id = coxs2v.getPseudoIDStringFromIDString("20110318_9999", false);
@@ -436,7 +436,7 @@ BOOST_AUTO_TEST_CASE(COXS2V_IndividualIDsMap_EqualBoundaryStrings)
 BOOST_AUTO_TEST_SUITE_END()
 
 //--------------------------------------------------------------------------------
-// eval 
+// eval
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_eval)
 
@@ -449,7 +449,7 @@ BOOST_AUTO_TEST_SUITE_END()
 
 
 //--------------------------------------------------------------------------------
-// imgUtils 
+// imgUtils
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_imgUtils)
 
@@ -461,7 +461,7 @@ BOOST_AUTO_TEST_CASE(imgUtils_undef_test)
 BOOST_AUTO_TEST_SUITE_END()
 
 //--------------------------------------------------------------------------------
-// logging 
+// logging
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_logging)
 
@@ -473,7 +473,7 @@ BOOST_AUTO_TEST_CASE(logging_undef_test)
 BOOST_AUTO_TEST_SUITE_END()
 
 //--------------------------------------------------------------------------------
-// norm 
+// norm
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_norm)
 
@@ -485,7 +485,7 @@ BOOST_AUTO_TEST_CASE(norm_undef_test)
 BOOST_AUTO_TEST_SUITE_END()
 
 //--------------------------------------------------------------------------------
-// testing 
+// testing
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_testing)
 
@@ -497,7 +497,7 @@ BOOST_AUTO_TEST_CASE(testing_undef_test)
 BOOST_AUTO_TEST_SUITE_END()
 
 //--------------------------------------------------------------------------------
-// timing 
+// timing
 //--------------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(TestSuite_types)
 
