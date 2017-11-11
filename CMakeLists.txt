@@ -1,5 +1,5 @@
 #========================================
-# Common (C++) 
+# Common (C++)
 #========================================
 
 cmake_minimum_required(VERSION 2.8)
@@ -9,7 +9,7 @@ set(CommonCpp_PROJECT "CommonCpp")
 project(${CommonCpp_PROJECT})
 
 if(MSVC)
-    set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)    
+    set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)
     add_definitions("/EHsc")
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 else()
@@ -66,7 +66,7 @@ endforeach()
 set(CommonCpp_LIBRARY_STATIC "STATIC")
 set(CommonCpp_LIBRARY_SHARED "SHARED")
 set(CommonCpp_LIBRARY_TYPE ${CommonCpp_LIBRARY_STATIC} CACHE STRING "Library type to generate")
-set_property(CACHE CommonCpp_LIBRARY_TYPE PROPERTY STRINGS ${CommonCpp_LIBRARY_STATIC} ${CommonCpp_LIBRARY_SHARED}) 
+set_property(CACHE CommonCpp_LIBRARY_TYPE PROPERTY STRINGS ${CommonCpp_LIBRARY_STATIC} ${CommonCpp_LIBRARY_SHARED})
 
 # find OpenCV
 find_package(OpenCV 3 REQUIRED)
@@ -85,7 +85,7 @@ if(${CommonCpp_BUILD_TESTS})
 else()
     find_package(Boost REQUIRED COMPONENTS filesystem system)
 endif()
-if(${Boost_FOUND})    
+if(${Boost_FOUND})
     set(CommonCpp_INCLUDE_DIRS  ${CommonCpp_INCLUDE_DIRS}   ${Boost_INCLUDE_DIRS})
     set(CommonCpp_LIBRARIES     ${CommonCpp_LIBRARIES}      ${Boost_LIBRARIES})
     set(CommonCpp_LINK_DIRS     ${CommonCpp_LINK_DIRS}      ${Boost_LIBRARY_DIRS})
@@ -116,17 +116,17 @@ include_directories(${CommonCpp_INCLUDE_DIRS})
 link_directories(${CommonCpp_LINK_DIRS})
 target_link_libraries(${CommonCpp_LIBRARY_TARGET} ${CommonCpp_LIBRARIES})
 
-if(${CommonCpp_BUILD_TESTS}) 
+if(${CommonCpp_BUILD_TESTS})
     set(CommonCpp_TEST ${CommonCpp_PROJECT}_Test)
     add_executable(${CommonCpp_TEST} ${CommonCpp_SOURCE_TESTS} ${CommonCpp_HEADER_TESTS})
-    target_include_directories(${CommonCpp_TEST} PUBLIC ${CommonCpp_INCLUDE_DIRS})    
+    target_include_directories(${CommonCpp_TEST} PUBLIC ${CommonCpp_INCLUDE_DIRS})
     target_link_libraries(${CommonCpp_TEST} ${CommonCpp_LIBRARIES} ${CommonCpp_PROJECT})
 endif()
 
 # fix config paths as required
-string(REGEX REPLACE "\\\\" "/" INSTALL_INCLUDE_DIR ${INSTALL_INCLUDE_DIR}) 
-string(REGEX REPLACE "\\\\" "/" INSTALL_BINARY_DIR  ${INSTALL_BINARY_DIR}) 
-string(REGEX REPLACE "\\\\" "/" INSTALL_LIBRARY_DIR ${INSTALL_LIBRARY_DIR}) 
+string(REGEX REPLACE "\\\\" "/" INSTALL_INCLUDE_DIR ${INSTALL_INCLUDE_DIR})
+string(REGEX REPLACE "\\\\" "/" INSTALL_BINARY_DIR  ${INSTALL_BINARY_DIR})
+string(REGEX REPLACE "\\\\" "/" INSTALL_LIBRARY_DIR ${INSTALL_LIBRARY_DIR})
 
 # update config file
 set(CommonCpp_CONFIG_INC_DIR    ${INSTALL_INCLUDE_DIR})
@@ -152,7 +152,7 @@ install(TARGETS ${CommonCpp_PROJECT}
 install(FILES   ${CommonCpp_HEADER_FILES} DESTINATION ${INSTALL_INCLUDE_DIR})
 install(FILES   ${CommonCpp_CONFIG_PATH}  DESTINATION ${INSTALL_CMAKE_DIR})
 
-if(${CommonCpp_BUILD_TESTS} AND ${CommonCpp_INSTALL_TESTS})    
+if(${CommonCpp_BUILD_TESTS} AND ${CommonCpp_INSTALL_TESTS})
     file(GLOB CommonCpp_IMG_TEST ${CommonCpp_IMG_DIR}/*)
     install(FILES   ${CommonCpp_IMG_TEST}       DESTINATION ${INSTALL_BINARY_DIR})
     install(TARGETS ${CommonCpp_TEST} RUNTIME   DESTINATION ${INSTALL_BINARY_DIR})
@@ -165,7 +165,7 @@ if(MSVC)
     if(${CommonCpp_BUILD_TESTS})
         target_compile_options(${CommonCpp_TEST}        PRIVATE "/MD$<$<CONFIG:Debug>:d>")
         target_compile_definitions(${CommonCpp_TEST}    PRIVATE "-D_ITERATOR_DEBUG_LEVEL=$<$<CONFIG:Debug>:2;_DEBUG>$<$<NOT:$<CONFIG:Debug>>:0>")
-    endif()    
+    endif()
 endif()
 
 mark_as_advanced(FORCE CommonCpp_INCLUDE_DIRS CommonCpp_LIBRARIES)

@@ -1,13 +1,15 @@
 /* -------------------------
 Logging/printing operations
 ------------------------- */
+
 #include "logging.h"
+#include "types.h"
 
 std::string currentTimeStamp()
 {
     time_t now = time(0);
     struct tm * timeinfo;
-    timeinfo = localtime (&now);
+    timeinfo = localtime(&now);
     // char dt[64];
     // ctime_s(dt, sizeof dt, &now);
     char buffer[256];

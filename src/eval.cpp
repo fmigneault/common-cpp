@@ -1,9 +1,11 @@
 /* --------------------
 Evaluation operations
 ---------------------*/
+
 #include "eval.h"
 #include "testing.h"
 #include <algorithm>
+#include <vector>
 
 // Counts the number of TP/TN/FP/FN according to specified scores, corresponding target class outputs and threshold value
 // Target values are assumed to be greater than zero for positives and is negative class otherwise
@@ -43,7 +45,7 @@ double calcSPC(int TN, int FP) { return calcTNR(TN, FP); }
 double calcTNR(ConfusionMatrix cm) { return calcTNR(cm.TN, cm.FP); }
 double calcSPC(ConfusionMatrix cm) { return calcSPC(cm.TN, cm.FP); }
 
-// False Positive Rate 
+// False Positive Rate
 double calcFPR(int FP, int TN) { return (double)FP / (double)(FP + TN); }
 double calcFPR(ConfusionMatrix cm) { return calcFPR(cm.FP, cm.TN); }
 
@@ -63,7 +65,7 @@ double calcAUC(std::vector<double> FPR, std::vector<double> TPR, double pFPR)
 
     // find sorted value indexes in ascending order
     size_t nPoints = TPR.size() - 1;
-    double pAUC = 0; 
+    double pAUC = 0;
     bool goNext = true;
     for (size_t n = 0; n < nPoints && goNext; n++)
     {
@@ -81,7 +83,7 @@ double calcAUC(std::vector<double> FPR, std::vector<double> TPR, double pFPR)
         }
 
         // accumulate partial trapezoidal area
-        pAUC += (nextTPR + currTPR) * std::abs(nextFPR - currFPR) / 2;        
+        pAUC += (nextTPR + currTPR) * std::abs(nextFPR - currFPR) / 2;
     }
     return pAUC / pFPR;
 }
@@ -104,7 +106,7 @@ double calcAUPR(std::vector<double> TPR, std::vector<double> PPV)
 {
     /* filter NaN values
            these are possible and valid when the threshold is greater than the maximum obtained score, which makes PPV = 0/0
-           because all are evaluated as negatives (FP or TP) by definition and [PPV = TP/(TP+FP)] is based only on positives 
+           because all are evaluated as negatives (FP or TP) by definition and [PPV = TP/(TP+FP)] is based only on positives
 
            since TPR is expected in ascending order, the corresponding PPV NaN values should be at the start of the vector
     */
