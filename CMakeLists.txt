@@ -77,9 +77,9 @@ if(${OpenCV_FOUND})
 endif()
 
 # find Boost
-option(Boost_USE_STATIC_LIBS    OFF)
-option(Boost_USE_MULTITHREADED  ON)
-option(Boost_USE_STATIC_RUNTIME OFF)
+option(Boost_USE_STATIC_LIBS    "Use Boost static libraries"        OFF)
+option(Boost_USE_MULTITHREADED  "Use Boost multithreaded libraries" ON)
+option(Boost_USE_STATIC_RUNTIME "Use Boost static runtime linking"  OFF)
 if(${CommonCpp_BUILD_TESTS})
     find_package(Boost REQUIRED COMPONENTS filesystem system unit_test_framework)
 else()
@@ -92,7 +92,7 @@ if(${Boost_FOUND})
 endif()
 
 # find OpenMP
-option(WITH_OpenMP ON)
+option(WITH_OpenMP "Use OpenMP for parallelism computations" ON)
 if(${WITH_OpenMP})
     find_package(OpenMP)
     if("${OpenMP_FOUND}" OR "${OpenMP_C_FOUND}" OR "${OpenMP_CXX_FOUND}")
