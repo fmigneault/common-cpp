@@ -4,18 +4,18 @@
 /*
     Reads feature vectors and corresponding target output class from the specified formatted data sample file
 */
-void DataFile::readSampleDataFile(string filePath, vector<FeatureVector>& sampleFeatureVectors, 
-                                  FileFormat format, string header)
+void DataFile::readSampleDataFile(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                  FileFormat format, std::string header)
 {
-    vector<int> dummyOutputTargets;
+    std::vector<int> dummyOutputTargets;
     readSampleDataFile(filePath, sampleFeatureVectors, dummyOutputTargets, format, header);
 }
 
 /*
     Reads feature vectors and corresponding target output class from the specified formatted data sample file
 */
-void DataFile::readSampleDataFile(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, 
-                                  FileFormat format, string header)
+void DataFile::readSampleDataFile(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                  std::vector<int>& targetOutputs, FileFormat format, std::string header)
 {
     if (format == BINARY)
         readSampleDataFile_binary(filePath, sampleFeatureVectors, targetOutputs, header);
@@ -25,10 +25,11 @@ void DataFile::readSampleDataFile(string filePath, vector<FeatureVector>& sample
         THROW("Unsupported file format");
 }
 
-void DataFile::readSampleDataFile_binary(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, string header)
+void DataFile::readSampleDataFile_binary(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                         std::vector<int>& targetOutputs, std::string header)
 {
     // check for opened file
-    ifstream samplesFile(filePath, ios::in | ios::binary);
+    std::ifstream samplesFile(filePath, std::ios::in | std::ios::binary);
     ASSERT_THROW(samplesFile.is_open(), "Failed to open the specified samples data BINARY file: '" + filePath + "'");
 
     try
@@ -45,8 +46,8 @@ void DataFile::readSampleDataFile_binary(string filePath, vector<FeatureVector>&
         ASSERT_THROW(nFeatures > 0, "Read number of features should be greater than zero");
 
         // retrieve sample features and target outputs
-        sampleFeatureVectors = vector<FeatureVector>(nSamples);
-        targetOutputs = vector<int>(nSamples);
+        sampleFeatureVectors = std::vector<FeatureVector>(nSamples);
+        targetOutputs = std::vector<int>(nSamples);
         samplesFile.read(reinterpret_cast<char*>(&targetOutputs[0]), nSamples * sizeof(targetOutputs[0]));
         for (int s = 0; s < nSamples; ++s)
         {
@@ -56,7 +57,7 @@ void DataFile::readSampleDataFile_binary(string filePath, vector<FeatureVector>&
         }
         samplesFile.close();
     }
-    catch (exception& ex)
+    catch (std::exception& ex)
     {
         // avoid locked file from assert failure
         if (samplesFile.is_open())
@@ -65,28 +66,29 @@ void DataFile::readSampleDataFile_binary(string filePath, vector<FeatureVector>&
     }
 }
 
-void DataFile::readSampleDataFile_libsvm(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, string header)
+void DataFile::readSampleDataFile_libsvm(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                         std::vector<int>& targetOutputs, std::string header)
 {
-    ifstream samplesFile(filePath);
+    std::ifstream samplesFile(filePath);
     ASSERT_THROW(samplesFile, "Could not open specified ESVM samples data file: '" + filePath + "'");
 
     try
     {
-        vector<FeatureVector> samples;
-        vector<int> targets;
+        std::vector<FeatureVector> samples;
+        std::vector<int> targets;
         size_t nFeatures = 0;
-        static string delimiter = ":";
+        static std::string delimiter = ":";
         static size_t offDelim = delimiter.length();
 
         // loop each line
         while (samplesFile)
         {
-            string line;
-            if (!getline(samplesFile, line)) break;
+            std::string line;
+            if (!std::getline(samplesFile, line)) break;
 
             bool firstPart = true;
-            istringstream ssline(line);
-            string spart;
+            std::istringstream ssline(line);
+            std::string spart;
             int prev = 0;
             int index = 0;
             double value = 0;
@@ -95,15 +97,15 @@ void DataFile::readSampleDataFile_libsvm(string filePath, vector<FeatureVector>&
             // loop each part delimited by a space
             while (ssline)
             {
-                if (!getline(ssline, spart, ' ')) break;
+                if (!std::getline(ssline, spart, ' ')) break;
                 if (firstPart)
                 {
                     // Reading label
-                    ASSERT_THROW(spart.find(delimiter) == string::npos, "Could not find class label before sample of specified file");
+                    ASSERT_THROW(spart.find(delimiter) == std::string::npos, "Could not find class label before sample of specified file");
 
                     #if ESVM_READ_LIBSVM_PARSER_MODE == 0
                     int target = 0;
-                    istringstream(spart) >> target;
+                    std::istringstream(spart) >> target;
                     #elif ESVM_READ_LIBSVM_PARSER_MODE == 1
                     int target = strtol(spart.c_str(), NULL, 10);
                     #elif ESVM_READ_LIBSVM_PARSER_MODE == 2
@@ -111,7 +113,7 @@ void DataFile::readSampleDataFile_libsvm(string filePath, vector<FeatureVector>&
                     #else
                     THROW("Undefined parser mode");
                     #endif/*ESVM_READ_LIBSVM_PARSER_MODE*/
-                    
+
                     targets.push_back(target);
                     firstPart = false;
                 }
@@ -119,11 +121,11 @@ void DataFile::readSampleDataFile_libsvm(string filePath, vector<FeatureVector>&
                 {
                     // Reading features
                     size_t offset = spart.find(delimiter);
-                    ASSERT_THROW(offset != string::npos, "Failed to find feature 'index:value' delimiter");
+                    ASSERT_THROW(offset != std::string::npos, "Failed to find feature 'index:value' delimiter");
 
                     #if ESVM_READ_LIBSVM_PARSER_MODE == 0
-                    istringstream(spart.substr(0, offset)) >> index;
-                    istringstream(spart.erase(0, offset + offDelim)) >> value;
+                    std::istringstream(spart.substr(0, offset)) >> index;
+                    std::istringstream(spart.erase(0, offset + offDelim)) >> value;
                     #elif ESVM_READ_LIBSVM_PARSER_MODE == 1
                     index = strtol(spart.substr(0, offset).c_str(), NULL, 10);
                     value = strtod(spart.erase(0, offset + offDelim).c_str(), NULL);
@@ -161,7 +163,7 @@ void DataFile::readSampleDataFile_libsvm(string filePath, vector<FeatureVector>&
         sampleFeatureVectors = samples;
         targetOutputs = targets;
     }
-    catch (exception& ex)
+    catch (std::exception& ex)
     {
         // avoid locked file from assert failure
         if (samplesFile.is_open())
@@ -173,8 +175,8 @@ void DataFile::readSampleDataFile_libsvm(string filePath, vector<FeatureVector>&
 /*
     Writes feature vectors and corresponding target output class to a data sample file
 */
-void DataFile::writeSampleDataFile(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, 
-                                   FileFormat format, string header)
+void DataFile::writeSampleDataFile(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                   std::vector<int>& targetOutputs, FileFormat format, std::string header)
 {
     size_t nSamples = sampleFeatureVectors.size();
     ASSERT_THROW(nSamples > 0, "Number of samples must be greater than zero");
@@ -196,7 +198,8 @@ void DataFile::writeSampleDataFile(string filePath, vector<FeatureVector>& sampl
 /*
     Writes feature vectors and corresponding target output class to a BINARY data sample file
 */
-void DataFile::writeSampleDataFile_binary(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, string header)
+void DataFile::writeSampleDataFile_binary(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                          std::vector<int>& targetOutputs, std::string header)
 {
     /*
     Expected data format and order:    <all reinterpreted as char*>
@@ -211,7 +214,7 @@ void DataFile::writeSampleDataFile_binary(string filePath, vector<FeatureVector>
     */
 
     // check opened file
-    ofstream samplesFile(filePath, ios::out | ios::binary);
+    std::ofstream samplesFile(filePath, std::ios::out | std::ios::binary);
     ASSERT_THROW(samplesFile.is_open(), "Failed to open the specified samples data BINARY file: '" + filePath + "'");
 
     // get sample and feature counts (already checked valid dimensions from calling function)
@@ -235,9 +238,10 @@ void DataFile::writeSampleDataFile_binary(string filePath, vector<FeatureVector>
 /*
     Writes feature vectors and corresponding target output class to a LIBSVM formatted data sample file
 */
-void DataFile::writeSampleDataFile_libsvm(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, string header)
+void DataFile::writeSampleDataFile_libsvm(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                          std::vector<int>& targetOutputs, std::string header)
 {
-    ofstream samplesFile(filePath);
+    std::ofstream samplesFile(filePath);
     ASSERT_THROW(samplesFile, "Could not open specified ESVM sample data file: '" + filePath + "'");
 
     // get sample and feature counts (already checked valid dimensions from calling function)
@@ -249,7 +253,7 @@ void DataFile::writeSampleDataFile_libsvm(string filePath, vector<FeatureVector>
         samplesFile << targetOutputs[s];
         for (size_t f = 0; f < nFeatures; ++f)
             samplesFile << " " << (f + 1) << ":" << sampleFeatureVectors[s][f];
-        samplesFile << endl;
+        samplesFile << std::endl;
     }
 }
 

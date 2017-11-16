@@ -8,7 +8,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-using namespace std;
 
 #define DEFAULT_BINARY_SAMPLES_HEADER "binary samples"
 
@@ -17,19 +16,23 @@ enum FileFormat { BINARY, LIBSVM, CSV };
 class DataFile
 {
 public:
-    static void readSampleDataFile(string filePath, vector<FeatureVector>& sampleFeatureVectors, FileFormat format, 
-                                   string header = DEFAULT_BINARY_SAMPLES_HEADER);
-    static void readSampleDataFile(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, FileFormat format,
-                                   string header = DEFAULT_BINARY_SAMPLES_HEADER);
-    static void writeSampleDataFile(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, FileFormat format,
-                                    string header = DEFAULT_BINARY_SAMPLES_HEADER);
-    static bool checkBinaryHeader(ifstream& binaryFileStream, string header);
+    static void readSampleDataFile(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors, FileFormat format,
+                                   std::string header = DEFAULT_BINARY_SAMPLES_HEADER);
+    static void readSampleDataFile(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                   std::vector<int>& targetOutputs, FileFormat format, std::string header = DEFAULT_BINARY_SAMPLES_HEADER);
+    static void writeSampleDataFile(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                    std::vector<int>& targetOutputs, FileFormat format, std::string header = DEFAULT_BINARY_SAMPLES_HEADER);
+    static bool checkBinaryHeader(std::ifstream& binaryFileStream, std::string header);
 
 private:
-    static void readSampleDataFile_binary(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, string header);
-    static void readSampleDataFile_libsvm(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, string header);
-    static void writeSampleDataFile_binary(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, string header);
-    static void writeSampleDataFile_libsvm(string filePath, vector<FeatureVector>& sampleFeatureVectors, vector<int>& targetOutputs, string header);    
+    static void readSampleDataFile_binary(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                          std::vector<int>& targetOutputs, std::string header);
+    static void readSampleDataFile_libsvm(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                          std::vector<int>& targetOutputs, std::string header);
+    static void writeSampleDataFile_binary(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                           std::vector<int>& targetOutputs, std::string header);
+    static void writeSampleDataFile_libsvm(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
+                                           std::vector<int>& targetOutputs, std::string header);
 };
 
 #endif/*COMMON_CPP_FILES_H*/

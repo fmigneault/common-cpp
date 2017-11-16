@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <float.h>
 #include <map>
+#include <vector>
 
 double normalize(NormType norm, double value, double param1, double param2, bool clipValue)
 {
@@ -45,7 +46,7 @@ FeatureVector normalizeOverAll(NormType norm, const FeatureVector& featureVector
     return normalizeOverAll(norm, featureVector, param1, param2, clipFeatures);
 }
 
-FeatureVector normalizePerFeature(NormType norm, const FeatureVector& featureVector, 
+FeatureVector normalizePerFeature(NormType norm, const FeatureVector& featureVector,
                                   const FeatureVector& featuresParam1, const FeatureVector& featuresParam2, bool clipFeatures)
 {
     // check number of features
@@ -54,7 +55,7 @@ FeatureVector normalizePerFeature(NormType norm, const FeatureVector& featureVec
     ASSERT_THROW(featuresParam2.size() == nFeatures, "param2 features dimension doesn't match feature vector to normalize");
     FeatureVector normFeatureVector(nFeatures);
 
-    // normalize values    
+    // normalize values
     for (size_t f = 0; f < nFeatures; f++)
         normFeatureVector[f] = normalize(norm, featureVector[f], featuresParam1[f], featuresParam2[f], clipFeatures);
     return normFeatureVector;
@@ -70,7 +71,7 @@ std::vector<double> normalizeClassScores(NormType norm, const std::vector<double
     return normalizeOverAll(norm, scores, clipScores);
 }
 
-void findNormParamsAcrossFeatures(NormType norm, const FeatureVector& featureVector, 
+void findNormParamsAcrossFeatures(NormType norm, const FeatureVector& featureVector,
                                   OUT_PARAM double& min, OUT_PARAM double& max, int* posMin, int* posMax)
 {
     size_t nFeatures = featureVector.size();
@@ -119,8 +120,8 @@ void findNormParamsOverAll(NormType norm, const std::vector<FeatureVector>& feat
         return;
     }
     else if (norm == Z_SCORE)
-    {        
-        
+    {
+
         size_t nFeatures = featureVectors[0].size();
         size_t total = nFeatures * nSamples;
 
@@ -138,11 +139,11 @@ void findNormParamsOverAll(NormType norm, const std::vector<FeatureVector>& feat
         param2 = foundParam2;
         return;
     }
-    
+
     THROW("Undefined normalization method");
 }
 
-void findNormParamsPerFeature(NormType norm, const std::vector<FeatureVector>& featureVectors, 
+void findNormParamsPerFeature(NormType norm, const std::vector<FeatureVector>& featureVectors,
                               OUT_PARAM FeatureVector& featuresParam1, OUT_PARAM FeatureVector& featuresParam2)
 {
     size_t nSamples = featureVectors.size();
@@ -152,7 +153,7 @@ void findNormParamsPerFeature(NormType norm, const std::vector<FeatureVector>& f
 
     if (norm == MIN_MAX)
     {
-        // initialize with first vector        
+        // initialize with first vector
         FeatureVector min = featureVectors[0];
         FeatureVector max = featureVectors[0];
 
@@ -192,11 +193,11 @@ void findNormParamsPerFeature(NormType norm, const std::vector<FeatureVector>& f
         featuresParam2 = stddev;
         return;
     }
-    
+
     THROW("Undefined normalization method");
 }
 
 void findNormParamsClassScores(NormType norm, const std::vector<double>& scores, OUT_PARAM double& param1, OUT_PARAM double& param2)
-{    
+{
     findNormParamsAcrossFeatures(norm, scores, param1, param2);
 }

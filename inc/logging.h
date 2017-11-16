@@ -31,11 +31,11 @@ public:
     std::ofstream ofss;
     logstream(std::string filepath, bool useConsoleOutput = true, bool useFileOutput = true);
     ~logstream(void);
-    logstream& operator<< (std::ostream& (*pfun)(std::ostream&));
+    logstream& operator<<(std::ostream& (*pfun)(std::ostream&));
 };
 
 template <class T>
-inline logstream& operator<< (logstream& log, const T& val)
+inline logstream& operator<<(logstream& log, const T& val)
 {
     if (log.useFileOutput)      log.ofss << val;
     if (log.useConsoleOutput)   std::cout << val;
@@ -43,7 +43,7 @@ inline logstream& operator<< (logstream& log, const T& val)
 }
 
 template <class T>
-inline logstream& operator<< (logstream& log, const std::vector<T>& v)
+inline logstream& operator<<(logstream& log, const std::vector<T>& v)
 {
     std::ostringstream oss;
     oss << "[";
