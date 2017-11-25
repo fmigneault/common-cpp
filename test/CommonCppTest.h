@@ -9,4 +9,7 @@
 #define BOOST_TEST_MODULE Common (C++) Unit Tests
 #include <boost/test/unit_test.hpp>
 
+#include <boost/filesystem.hpp>
+namespace bfs = boost::filesystem;
+
 #endif/*COMMON_CPP_TEST_H*/

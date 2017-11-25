@@ -1,6 +1,9 @@
 #include "CommonCppTest.h"
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
 
 //--------------------------------------------------------------------------------
 // datafile
@@ -75,6 +78,82 @@ BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_inconsistentVectorDimens
 BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_validVectorData)
 {
     BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_raw_validVectorData)
+{
+    std::ofstream samplesFile;
+    std::string filename = "test_read_raw_samples.raw";
+    samplesFile.open(filename, std::ios::out);
+    samplesFile << "0.123,1.234,2.345,3.456,4.567" << std::endl
+                << "5.678,6.789,-7.89,-8.91,9.123" << std::endl;
+    samplesFile.close();
+    std::vector<FeatureVector> samples;
+    DataFile::readSampleDataFile(filename, samples, FileFormat::RAW);
+    bfs::remove(filename);
+
+    BOOST_CHECK_EQUAL(samples.size(), 2);
+    BOOST_CHECK_EQUAL(samples[0].size(), 5);
+    BOOST_CHECK_EQUAL(samples[1].size(), 5);
+    BOOST_CHECK_EQUAL(samples[0][0], 0.123);
+    BOOST_CHECK_EQUAL(samples[0][1], 1.234);
+    BOOST_CHECK_EQUAL(samples[0][2], 2.345);
+    BOOST_CHECK_EQUAL(samples[0][3], 3.456);
+    BOOST_CHECK_EQUAL(samples[0][4], 4.567);
+    BOOST_CHECK_EQUAL(samples[1][0], 5.678);
+    BOOST_CHECK_EQUAL(samples[1][1], 6.789);
+    BOOST_CHECK_EQUAL(samples[1][2], -7.89);
+    BOOST_CHECK_EQUAL(samples[1][3], -8.91);
+    BOOST_CHECK_EQUAL(samples[1][4], 9.123);
+}
+
+BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_raw_validVectorData_noFinalNewLine)
+{
+    std::ofstream samplesFile;
+    std::string filename = "test_read_raw_samples_no_final_newline.raw";
+    samplesFile.open(filename, std::ios::out);
+    samplesFile << "0.123,1.234,2.345,3.456,4.567" << std::endl
+                << "5.678,6.789,-7.89,-8.91,9.123";     // no newline here
+    samplesFile.close();
+    std::vector<FeatureVector> samples;
+    DataFile::readSampleDataFile(filename, samples, FileFormat::RAW);
+    bfs::remove(filename);
+
+    BOOST_CHECK_EQUAL(samples.size(), 2);
+    BOOST_CHECK_EQUAL(samples[0].size(), 5);
+    BOOST_CHECK_EQUAL(samples[1].size(), 5);
+    BOOST_CHECK_EQUAL(samples[0][0], 0.123);
+    BOOST_CHECK_EQUAL(samples[0][1], 1.234);
+    BOOST_CHECK_EQUAL(samples[0][2], 2.345);
+    BOOST_CHECK_EQUAL(samples[0][3], 3.456);
+    BOOST_CHECK_EQUAL(samples[0][4], 4.567);
+    BOOST_CHECK_EQUAL(samples[1][0], 5.678);
+    BOOST_CHECK_EQUAL(samples[1][1], 6.789);
+    BOOST_CHECK_EQUAL(samples[1][2], -7.89);
+    BOOST_CHECK_EQUAL(samples[1][3], -8.91);
+    BOOST_CHECK_EQUAL(samples[1][4], 9.123);
+}
+
+BOOST_AUTO_TEST_CASE(datafile_writeSampleDataFile_raw_validVectorData)
+{
+    std::ifstream samplesFile;
+    std::string filename = "test_write_raw_samples.raw";
+
+    std::vector<int> targetOutputs;
+    std::vector<FeatureVector> samples(2);
+    samples[0] = {0.123, 1.234, 2.345, 3.456, 4.567};
+    samples[1] = {5.678, 6.789, -7.89, -8.91, 9.123};
+    DataFile::writeSampleDataFile(filename, samples, targetOutputs, FileFormat::RAW);
+
+    samplesFile.open(filename, std::ios::in);
+    std::string sample1, sample2;
+    samplesFile >> sample1;
+    samplesFile >> sample2;
+    samplesFile.close();
+    bfs::remove(filename);
+
+    BOOST_CHECK_EQUAL(sample1, "0.123,1.234,2.345,3.456,4.567");
+    BOOST_CHECK_EQUAL(sample2, "5.678,6.789,-7.89,-8.91,9.123");
 }
 
 BOOST_AUTO_TEST_CASE(datafile_checkBinaryHeader)
