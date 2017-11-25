@@ -11,7 +11,7 @@
 
 #define DEFAULT_BINARY_SAMPLES_HEADER "binary samples"
 
-enum FileFormat { BINARY, LIBSVM, CSV };
+enum FileFormat { BINARY, LIBSVM, RAW };
 
 class DataFile
 {
@@ -25,10 +25,12 @@ public:
     static bool checkBinaryHeader(std::ifstream& binaryFileStream, std::string header);
 
 private:
+    static void readSampleDataFile_raw(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors);
     static void readSampleDataFile_binary(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
                                           std::vector<int>& targetOutputs, std::string header);
     static void readSampleDataFile_libsvm(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
                                           std::vector<int>& targetOutputs, std::string header);
+    static void writeSampleDataFile_raw(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors);
     static void writeSampleDataFile_binary(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,
                                            std::vector<int>& targetOutputs, std::string header);
     static void writeSampleDataFile_libsvm(std::string filePath, std::vector<FeatureVector>& sampleFeatureVectors,

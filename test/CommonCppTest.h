@@ -9,7 +9,7 @@
 #define BOOST_TEST_MODULE Common (C++) Unit Tests
 #include <boost/test/unit_test.hpp>
 
-static const ChokePoint chokepoint;
-static const COXS2V coxs2v;
+#include <boost/filesystem.hpp>
+namespace bfs = boost::filesystem;
 
 #endif/*COMMON_CPP_TEST_H*/
