@@ -42,7 +42,56 @@ BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_invalidNonAscendingIndex
 
 BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_libsvm_validVectorData)
 {
-    BOOST_WARN_MESSAGE(false, "tests not implemeneted");
+    std::ofstream samplesFile;
+    std::string filename = "test_read_libsvm_samples.data";
+    samplesFile.open(filename, std::ios::out);
+    samplesFile << "-1 1:0.123 2:1.234 3:2.345 4:3.456 5:4.567" << std::endl
+                << "1 1:5.678 2:6.789 3:-7.89 4:-8.91 5:9.123" << std::endl;
+    samplesFile.close();
+    std::vector<FeatureVector> samples;
+    std::vector<int> targetOutputs;
+    DataFile::readSampleDataFile(filename, samples, targetOutputs, FileFormat::LIBSVM);
+    bfs::remove(filename);
+
+    BOOST_CHECK_EQUAL(targetOutputs.size(), 2);
+    BOOST_CHECK_EQUAL(targetOutputs[0], -1);
+    BOOST_CHECK_EQUAL(targetOutputs[1], +1);
+
+    BOOST_CHECK_EQUAL(samples.size(), 2);
+    BOOST_CHECK_EQUAL(samples[0].size(), 5);
+    BOOST_CHECK_EQUAL(samples[1].size(), 5);
+    BOOST_CHECK_EQUAL(samples[0][0], 0.123);
+    BOOST_CHECK_EQUAL(samples[0][1], 1.234);
+    BOOST_CHECK_EQUAL(samples[0][2], 2.345);
+    BOOST_CHECK_EQUAL(samples[0][3], 3.456);
+    BOOST_CHECK_EQUAL(samples[0][4], 4.567);
+    BOOST_CHECK_EQUAL(samples[1][0], 5.678);
+    BOOST_CHECK_EQUAL(samples[1][1], 6.789);
+    BOOST_CHECK_EQUAL(samples[1][2], -7.89);
+    BOOST_CHECK_EQUAL(samples[1][3], -8.91);
+    BOOST_CHECK_EQUAL(samples[1][4], 9.123);
+}
+
+BOOST_AUTO_TEST_CASE(datafile_writeSampleDataFile_libsvm_validVectorData)
+{
+    std::ifstream samplesFile;
+    std::string filename = "test_write_libsvm_samples.data";
+
+    std::vector<int> targetOutputs = {-1, +1};
+    std::vector<FeatureVector> samples(2);
+    samples[0] = {0.123, 1.234, 2.345, 3.456, 4.567};
+    samples[1] = {5.678, 6.789, -7.89, -8.91, 9.123};
+    DataFile::writeSampleDataFile(filename, samples, targetOutputs, FileFormat::LIBSVM);
+
+    samplesFile.open(filename, std::ios::in);
+    std::string sample1, sample2;
+    std::getline(samplesFile, sample1);
+    std::getline(samplesFile, sample2);
+    samplesFile.close();
+    bfs::remove(filename);
+
+    BOOST_CHECK_EQUAL(sample1, "-1 1:0.123 2:1.234 3:2.345 4:3.456 5:4.567");
+    BOOST_CHECK_EQUAL(sample2, "1 1:5.678 2:6.789 3:-7.89 4:-8.91 5:9.123");
 }
 
 BOOST_AUTO_TEST_CASE(datafile_readSampleDataFile_binary_fileNotFound)
